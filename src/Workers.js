@@ -1,6 +1,7 @@
 import React from 'react';
 import data from './users';
 import Groups from "./Groups";
+import Table from './components/Table'
 class Workers extends React.Component {
 
     constructor (props){
@@ -37,22 +38,34 @@ class Workers extends React.Component {
 
     render (){
         return (
-            <div className='container mt-5'>
+            <div className='app-container col-md-9 ml-sm-auto col-lg-10 px-md-4 mt-5'>
                 <div className='row'>
                     <div className='col'>
-                        Сотрудники:  
-                        <ul className='list-group mt-3'>
-                            {/*Добавить удаление, редактирование, сверху кнопка создания нового юзера */}
-                            {this.state.users.map((item) => <li className='list-group-item' key={item.id}>{item.username+' '+item.email}</li>)}
-                        </ul>
+                        <div className='header'>Аудитория опроса</div>
+                        <table className='table'>   
+                            <thead>
+                                <tr>
+                                    <th>пользователь</th>
+                                    <th>группы</th>
+                                    <th>он оценивает</th>
+                                    <th>его оценивают</th>
+                                </tr>
+                            </thead>                         
+                        {/*Добавить удаление, редактирование, сверху кнопка создания нового юзера */}
+                            <tbody>
+                            {this.state.users.map((item) => 
+                            <tr>
+                                <td>{item.email}</td>
+                                <td>{item.email}</td>
+                                <td>{item.email}</td>
+                                <td>{item.email}</td>
+
+                            </tr>
+                            )}
+                            </tbody>
+                        </table>
                     </div>
-                    <div className='col'>
-                    <button onClick={this._onButtonClick} type="button" class="btn btn-success">Создать группу</button>
-                    {this.state.showComponent ?
-                        <Groups /> :
-                        null
-                    }
-                    </div>
+                    
                </div>
             </div>
         );

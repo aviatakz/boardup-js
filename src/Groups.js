@@ -4,9 +4,12 @@ import data from './users';
 class Groups extends React.Component {
     constructor (props){
         super(props);
+        this.onChangeUser = this.onChangeUser.bind(this);
+
         this.state = {
             users: [],
-            currentUser: {}
+            currentUser: {},
+            list: []
         }
     }
 
@@ -22,25 +25,38 @@ class Groups extends React.Component {
             console.log(user); 
           }       
 
-        this.setState({users:parsedList, currentUser:parsedList[0]});
+        this.setState({users:parsedList});
         this.state.users.map((item) => console.log(item.username))
 
     }
-
+    onChangeUser(e) {
+        console.log(e.target.value.username)
+        this.setState({
+          currentUser: e.target.value
+        })
+      }
+    addItem(e){
+        e.preventDefault();
+        const list = this.state.list;
+        const newItem = this.state.currentUser;
+        console.log(newItem.username)
+        this.setState({
+            list:[...this.state.list, newItem]
+        })
+    }
     render (){
         return (
-            <div className='container mt-5'>
+            <div className='col-md-9 ml-sm-auto col-lg-10 px-md-4 mt-5'>
                 <header>
                     <h3>Новая группа</h3>
-                    <form className='form-inline mt-3'>
+                    <form className='form-inline mt-3' onSubmit={(e)=>{this.addItem(e)}}>
                         <div className='form-group'>
-                            <label className='sr-only' htmlFor='newItemInput'>Добавить сотрудника</label>
                             {/*<input type='text' placeholder='Имя' id='newItemInput' />*/}
-                            <select ref="userInput"
+                            <select
                                 required
+                                value={this.state.currentUser}
                                 className="form-control"
-                                value={this.state.currentUser.username+' '+this.state.currentUser.email}
-                                onChange={this.onChangeUsername}>
+                                onChange={this.onChangeUser}>
                                 {
                                     this.state.users.map(function(user) {
                                     return <option 
@@ -64,7 +80,7 @@ class Groups extends React.Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {this.state.users.map((item, index) =>
+                        {this.state.list.map((item, index) =>
                         <tr key={item.id}>
                         <th scope="row">{index+1}</th>
                         <td>{item.username}</td>

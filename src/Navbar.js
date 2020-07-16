@@ -1,42 +1,35 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 
 class Navbar extends React.Component {
     render (){
         return (
-            <div>
-                <nav className="navbar navbar-default navbar-expand-lg navbar-dark bg-dark">
-                   
-                    <ul className="navbar-nav mr-auto mt-2 mt-lg-0 ml-5">
-                    <Link to='/'> 
-                    <a className="navbar-brand" href="#">
-                        <img src="360.png" width="40" height="40"  alt="" /> 
-                          Method360
-                    </a>
-                    </Link>
-                    <Link to='/workers'>
-                    <li className="nav-item ml-5">
-                        <a className="nav-link" href="#">Сотрудники</a>
+                <nav id='sidebarMenu' className="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+                   <div className='sidebar-sticky'>
+                    <ul className="nav flex-column">
+                    <li className="nav-item ml-2">
+                        <a className="nav-link semibold pb-3" href="#">                    
+                        <NavLink activeStyle={{ color:"#00BC00" }} to='/profile'>Ксения</NavLink>
+                        </a>
+                    <div className='border mb-3 ml-3'></div>
                     </li>
-                    </Link>
-                    <Link to='/groups'>
-                    <li className="nav-item ml-3">
-                        <a class="nav-link" href="#">Группы</a>
+                    
+                    <li className="nav-item ml-2">
+                        <a className="nav-link" href="#"><NavLink activeStyle={{ color:"#00BC00" }} exact to='/interviews'>Опросы</NavLink>
+                        </a>
                     </li>
-                    </Link>
-                    <Link to='/interviews'>
-                    <li className="nav-item ml-3">
-                        <a className="nav-link" href="#">Опросники</a>
+                    <li className="nav-item ml-2">
+                        <a class="nav-link" href="#"><NavLink activeStyle={{ color:"#00BC00" }} to='/workers'>Пользователи</NavLink></a>
                     </li>
-                    </Link>
-                    <Link to='/profile'>
-                    <li className="nav-item active ml-3">
-                        <a className="nav-link" href="#">Мой профиль</a>
+                    <li className="nav-item ml-2">
+                        <a className="nav-link" href="#"><NavLink activeStyle={{ color:"#00BC00" }} exact to='/groups'>Группы</NavLink></a>
                     </li>
-                    </Link>
+                    <li className="nav-item active ml-2">
+                        <a className="nav-link" href="#"><NavLink activeStyle={{ color:"#00BC00" }} to='/settings'>Настройки</NavLink></a>
+                    </li>
                     </ul>
+                    </div>
                 </nav>  
-            </div>
         );
     }
 }

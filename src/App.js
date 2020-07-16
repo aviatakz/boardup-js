@@ -6,13 +6,15 @@ import Workers from './Workers.js';
 import Groups from './Groups.js';
 import Interviews from './Interviews.js';
 import Profile from './Profile.js';
+import Settings from './Settings'
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 
 
 function App() {
   return (
     <Router>
-    <div className="App container-fluid">
+    <div className="container-fluid">
+      <div className='row'>
         <Navbar />
         <Switch>
           <Route path='/' exact component={Home} />
@@ -20,7 +22,9 @@ function App() {
           <Route path='/interviews' component={Interviews} />
           <Route path='/profile' component={Profile} />
           <Route path='/workers' component={Workers} />
+          <Route path='/settings' component={Settings} />
         </Switch>
+      </div>
     </div>
     </Router>
   );
