@@ -9,6 +9,9 @@ body {
     font-size: 14px !important;
     color:#2D2D2D !important;
 }
+.app-container{
+    margin-left: 200px !important;
+}
 .form-control:focus{
     box-shadow: 0 0 1px #00BC00;
 }
@@ -169,7 +172,7 @@ a:hover, a:active{
   .clear-icon{
     margin-left: 8px;
 }
-.questions-form{
+.disabled-form{
     margin-left: 10px;
 }
 .primary-btn{
@@ -192,9 +195,19 @@ th{
     border-bottom: none !important;
 }
 tbody tr:nth-child(odd) {background-color: #FAFCFE;}
+thead th:first-child {padding-right: 180px;}
 table{
     border: 1px solid rgba(0, 0, 0, .1);
 }
+table a{
+    color: #2D9CDB;
+}
 tbody tr:first-child td{
     border-top: none !important;
+}
+.hidden{
+    display: none;
+}
+.red{
+    color:red;
 }

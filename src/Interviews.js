@@ -6,21 +6,66 @@ class Interviews extends React.Component {
     constructor (props){
         super(props);
         this.state = {
-            isToggleOn: true, activeClass:true, questionForms:[]
+            activeClass:true,
+            questionObjects:[],
+            dateBegin: new Date(),
+            dateEnd: new Date(),
+            isActivated: true,
+            submittedObj:{}
         }
     this.onFocus = this.onFocus.bind(this);
-    }
-   
+    this.onSubmit = this.onSubmit.bind(this);
+    this.onBeginChange=this.onBeginChange.bind(this);
+    this.onEndChange=this.onEndChange.bind(this);
+    this.removeQuestion=this.removeQuestion.bind(this);
+
+}
+   componentDidMount(){
+       var firstDisabled=<QuestionForm onFocus={this.onFocus} isDisabled={true}/>
+       this.setState({
+        questionObjects:[...this.state.questionObjects, firstDisabled]
+       })
+   }
     onFocus=(e)=>{
+        const newItem = <QuestionForm onFocus={()=>{return}} isDisabled={false} removeQuestion={this.removeQuestion} />;
         this.setState({
-            showComponent: true,
-          });
+            questionObjects:[newItem,...this.state.questionObjects]
+        })
+        
+    }
+    
+    onBeginChange=(e)=>{
+        this.setState({
+            dateBegin:e.target.value
+        })
+    }
+    onEndChange=(e)=>{
+        this.setState({
+            dateEnd:e.target.value
+        })
+    }
+    onSubmit=(e)=>{
+        var questionsList=this.state.questionObjects;
+        questionsList.pop();
+        var submittedObj={
+            dateBegin: this.state.dateBegin,
+            dateEnd: this.state.dateEnd,
+            submittedQuestions: questionsList,
+            isActivated: this.state.isActivated
+        }
+        console.log(submittedObj.dateBegin,submittedObj.isActivated)
+        this.setState({
+            submittedObj:submittedObj
+        })
+    }
+    removeQuestion(item){
+      return;
     }
     handleClick=(event)=>{
         this.setState(state => ({
-            isToggleOn: !state.isToggleOn
+            isActivated: !state.isActivated
           }));  
-        if(this.state.isToggleOn){
+        if(this.state.isActivated){
             this.setState({activeClass:false})
         } else{
             this.setState({activeClass:true})
@@ -30,54 +75,36 @@ class Interviews extends React.Component {
         return (
             <div className='app-container col-md-9 ml-sm-auto col-lg-10 px-md-4 mt-5'>
                 <div className='header'>Опрос #1</div>
+                <form onSubmit={this.onSubmit}>
                 <div className='row date-toggle'>
                     <div className='col date-input'>
                         <label for='begin'>Дата начала</label>
-                        <input type='date' required className='form-control' id='begin' />
+                        <input type='date' required className='form-control' onChange={this.onBeginChange} id='begin' />
                     </div>
                     <div className='col date-input'>
                         <label for='end'>Дата окончания</label>
-                        <input type='date' required className='form-control' id='end' />
+                        <input type='date' required className='form-control' onChange={this.onEndChange} id='end' />
                     </div>
                     <div className='col toggle-content d-flex flex-column'>
                             <label for='toggle-switch'>Активен?</label>
                             <div className='switch-container mt-3'>
                             <label className="switch" >
-                            <input id='toggle-switch' type="checkbox" onClick={this.handleClick} checked={this.state.isToggleOn} className="default"/>
+                            <input id='toggle-switch' type="checkbox" onClick={this.handleClick} checked={this.state.isActivated} className="default"/>
                             <span className="slider round"></span>
                             </label>
                             </div>
                     </div>
                 </div> 
                 <div className='subtitle mt-4 mb-3'>Вопросы</div>
-                    <div className='row questions mb-3'>
-                        <div className='col question d-flex flex-row'>
-                            <img className='reorder-icon' src='reorder.svg'></img>
-                            <input type='text'  className='category-input form-control' placeholder='категория' value='Инициативность'/>
-                        </div>
-                        <div className='col question d-flex flex-row'>
-                            <input type='text'  className='question-input form-control' placeholder='Вопрос' value='Вопрос'/>
-                            <img className='clear-icon' src='clear.svg'></img>
-                        </div>
-                    </div>
-                    <div className='row questions mb-3'>
-                        <div className='col question d-flex flex-row'>
-                            <img className='reorder-icon' src='reorder.svg'></img>
-                            <input type='text'  className='category-input form-control' placeholder='категория' value='Смелость'/>
-                        </div>
-                        <div className='col question d-flex flex-row'>
-                            <input type='text'  className='question-input form-control' placeholder='Вопрос' value='Вопрос'/>
-                            <img className='clear-icon' src='clear.svg'></img>
-                        </div>
-                    </div>
-                    <QuestionForm onFocus = {this.onFocus} />
-                    {this.state.showComponent ?
-                        <QuestionForm onFocus = {this.onFocus}/> :
-                        null
-                    }
+                    
+                    {this.state.questionObjects.map((form,index) =>
+                            <div>{form}</div>) }
+                    
                     <div className='row'>
-                        <button className='btn primary-btn'>Сохранить</button>
+                        <button type='submit' className='btn primary-btn'>Сохранить</button>
                     </div>
+             </form>
+ 
             </div>
         );
     }

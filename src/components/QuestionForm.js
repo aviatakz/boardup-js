@@ -2,14 +2,15 @@ import React from 'react';
 
 
 const QuestionForm= (props)=> {
-
     return (
-        <div className='row questions questions-form mb-3'>
+        <div className={'row questions questions-form mb-3 '+(props.isDisabled ? 'disabled-form' : null)}>
             <div className='col question d-flex flex-row'>
-                <input type='text' onFocus={ () => props.onFocus()} className='category-input form-control' placeholder='категория' />
+                <img className={'reorder-icon '+(props.isDisabled ? 'hidden' : 'show')} src='reorder.svg'></img>
+                <input type='text' required onFocus={ () => props.onFocus()} className='category-input form-control' readOnly={props.isDisabled} placeholder='категория' />
             </div>
             <div className='col question d-flex flex-row'>
-                <input type='text'  onFocus={ () => props.onFocus()} className='question-input form-control' placeholder='Вопрос'/>
+                <input type='text' required onFocus={ () => props.onFocus()} className='question-input form-control' readOnly={props.isDisabled} placeholder='Вопрос'/>
+                <img className={'clear-icon '+(props.isDisabled ? 'hidden' : 'show')} src='clear.svg'></img>
             </div>
         </div>
     );

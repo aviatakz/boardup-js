@@ -1,14 +1,14 @@
 import React from 'react';
 import data from './users';
-import Groups from "./Groups";
 import Table from './components/Table'
+import {NavLink} from 'react-router-dom';
+
 class Workers extends React.Component {
 
     constructor (props){
         super(props);
         this.state = {
-            users: [],
-            showComponent: false
+            users: []
         }
         this._onButtonClick = this._onButtonClick.bind(this);
     }
@@ -49,6 +49,7 @@ class Workers extends React.Component {
                                     <th>группы</th>
                                     <th>он оценивает</th>
                                     <th>его оценивают</th>
+                                    <th></th>
                                 </tr>
                             </thead>                         
                         {/*Добавить удаление, редактирование, сверху кнопка создания нового юзера */}
@@ -56,10 +57,10 @@ class Workers extends React.Component {
                             {this.state.users.map((item) => 
                             <tr>
                                 <td>{item.email}</td>
-                                <td>{item.email}</td>
-                                <td>{item.email}</td>
-                                <td>{item.email}</td>
-
+                                <td>{item.group}</td>
+                                <td className={item.target==0 ? 'red':'regular'}>{item.target}</td>
+                                <td className={item.targetedBy==0 ? 'red':'regular'}>{item.targetedBy}</td>
+                            <td><NavLink to='/interviews'>{item.targetedBy==0 ? 'создать':'редактировать'}</NavLink></td>
                             </tr>
                             )}
                             </tbody>
