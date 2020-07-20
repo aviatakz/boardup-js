@@ -1,0 +1,213 @@
+body {
+    font-family: 'Montserrat' !important;
+    font-weight: 400;
+    font-size: 14px !important;
+    color: #222222;
+    background-color: #F8F9FA;
+}
+.form-control{
+    font-size: 14px !important;
+    color:#2D2D2D !important;
+}
+.app-container{
+    margin-left: 200px !important;
+}
+.form-control:focus{
+    box-shadow: 0 0 1px #00BC00;
+}
+input[type=date]:required:invalid::-webkit-datetime-edit {
+    color: transparent;
+}
+input[type=date]:focus::-webkit-datetime-edit {
+    color: black !important;
+}
+a{
+    color: black;
+}
+.header{
+    font-weight: 600;
+    font-size: 32px;
+    line-height: 39px;
+    margin-bottom: 24px;
+}
+.subtitle{
+    font-style: normal;
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 27px;
+}
+a:hover, a:active{
+    color: #00BC00 !important;
+    text-decoration-line: none !important;
+}
+.semibold{
+    font-weight: 600;
+}
+.sidebar{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    padding: 48px 0 0;
+    width: 170px;
+    background-color: #EFF5FB !important;
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+}
+.sidebar-sticky{
+    top: 0;
+    height: calc(100vh - 48px);
+}
+.border {
+    display: block;
+    width: 135px;
+    height: 1px;
+    background: black;
+}
+.date-input input, .category-input{
+    box-shadow: 0px 1px 8px rgba(0, 0, 0, 0.05);
+    width: 165px;
+    height: 40px;
+}
+.date-input label, .toggle-content label{
+    font-size: 11px;
+    padding-left: 15px;
+    margin-bottom: 0.1rem !important;
+}
+.date-input, .toggle-content, .question{
+    flex-grow: 0 !important;
+    padding-right: 15px;
+}
+
+/* switch */
+.toggle-content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.toggle-content .switch {
+    position: relative;
+    display: inline-block;
+    width: 32px;
+    height: 20px;
+  }
+  .cover{
+    background-color: rgba(255, 255, 255) !important;
+    position: absolute;
+    top: 0;
+    height: 7rem;
+    margin-top: 43.5rem;
+    width: 30rem;
+    z-index: 2;  
+  }
+  .covered{
+    position: relative;
+  }
+  /* Hide default HTML checkbox */
+  .toggle-content .switch input {display:none;}
+  
+  /* The slider */
+  .toggle-content .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(155, 155, 155, 0.1);
+    transition: .4s;
+  }
+  
+  .toggle-content .slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    /*left: 8px;
+    bottom: 4px;*/
+    background-color: #2AA952;
+    box-shadow: 0px 0px 8px rgba(42, 169, 82, 0.45);;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  .tog-l{
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 16px;
+    letter-spacing: 0.5px;
+  }
+  .tog-l-2{
+      color:#2AA952;
+      box-shadow: 0px 0px 8px rgba(42, 169, 82, 0.45);;
+  }
+  .toggle-content input.default:checked + .slider {
+    background-color: rgba(155, 155, 155, 0.1);
+    }
+  .toggle-content input:focus + .slider {
+    box-shadow: 0px 0px 8px rgba(42, 169, 82, 0.45);;
+}
+  
+  .toggle-content input:checked + .slider:before {
+    -webkit-transform: translateX(12px);
+    -ms-transform: translateX(12px);
+    transform: translateX(12px);
+  }
+  
+  /* Rounded sliders */
+  .toggle-content .slider.round {
+    border-radius: 12px;
+  }
+  
+  .toggle-content .slider.round:before {
+    border-radius: 50%;
+  }
+
+  .question-input{
+      width: 521px; 
+      height: 40px;
+  }
+  .reorder-icon{
+    margin-right: 8px;
+  }
+  .clear-icon{
+    margin-left: 8px;
+}
+.disabled-form{
+    margin-left: 10px;
+}
+.primary-btn{
+    font-size: 14px;
+    width: 200px;
+    height: 40px;
+    color: white;
+    background: #00BC00;
+    box-shadow: 0px 4px 8px rgba(211, 38, 38, 0.25);
+    border-radius: 25px;
+}
+
+/**TABLE**/
+thead{
+    background-color: #EFF5FB;
+    color: #333333;
+}
+th{
+    font-weight: 400;
+    border-bottom: none !important;
+}
+tbody tr:nth-child(odd) {background-color: #FAFCFE;}
+thead th:first-child {padding-right: 180px;}
+table{
+    border: 1px solid rgba(0, 0, 0, .1);
+}
+table a{
+    color: #2D9CDB;
+}
+tbody tr:first-child td{
+    border-top: none !important;
+}
+.hidden{
+    display: none;
+}
+.red{
+    color:red;
+}
