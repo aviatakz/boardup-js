@@ -15,7 +15,7 @@ class Navbar extends React.Component {
                     </li>
                     
                     <li className="nav-item ml-2">
-                        <a className="nav-link" href="#"><NavLink activeStyle={{ color:"#00BC00" }} exact to='/interviews'>Опросы</NavLink>
+                        <a className="nav-link" href="#"><NavLink activeStyle={{ color:"#00BC00" }} exact to='/api/interviews'>Опросы</NavLink>
                         </a>
                     </li>
                     <li className="nav-item ml-2">

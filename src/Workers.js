@@ -10,7 +10,6 @@ class Workers extends React.Component {
         this.state = {
             users: []
         }
-        this._onButtonClick = this._onButtonClick.bind(this);
     }
 
     componentDidMount (){
@@ -26,15 +25,9 @@ class Workers extends React.Component {
           }       
 
         this.setState({users:parsedList});
-        this.state.users.map((item) => console.log(item.username))
+        this.state.users.forEach((item) => console.log(item.username))
         
     }
-
-    _onButtonClick() {
-        this.setState({
-          showComponent: true,
-        });
-      }
 
     render (){
         return (
@@ -58,8 +51,8 @@ class Workers extends React.Component {
                             <tr>
                                 <td>{item.email}</td>
                                 <td>{item.group}</td>
-                                <td className={item.target==0 ? 'red':'regular'}>{item.target}</td>
-                                <td className={item.targetedBy==0 ? 'red':'regular'}>{item.targetedBy}</td>
+                                <td className={item.target==0 ? 'text-danger':'regular'}>{item.target}</td>
+                                <td className={item.targetedBy==0 ? 'text-danger':'regular'}>{item.targetedBy}</td>
                             <td><NavLink to='/interviews'>{item.targetedBy==0 ? 'создать':'редактировать'}</NavLink></td>
                             </tr>
                             )}
