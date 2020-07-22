@@ -1,5 +1,4 @@
 import React from 'react';
-import QuestionForm from './components/QuestionForm';
 
 
 class Interviews extends React.Component {
@@ -7,33 +6,12 @@ class Interviews extends React.Component {
         super(props);
         this.state = {
             activeClass:true,
-            questionObjects:[],
             dateBegin: new Date(),
             dateEnd: new Date(),
             isActivated: true,
-            submittedObj:{}
+            inputList:[{ category: "", question: "" }]
         }
-    this.onFocus = this.onFocus.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
-    this.onBeginChange=this.onBeginChange.bind(this);
-    this.onEndChange=this.onEndChange.bind(this);
-    this.removeQuestion=this.removeQuestion.bind(this);
-
-}
-   componentDidMount(){
-       var firstDisabled=<QuestionForm onFocus={this.onFocus} isDisabled={true}/>
-       this.setState({
-        questionObjects:[...this.state.questionObjects, firstDisabled]
-       })
-   }
-    onFocus=(e)=>{
-        const newItem = <QuestionForm onFocus={()=>{return}} isDisabled={false} removeQuestion={this.removeQuestion} />;
-        this.setState({
-            questionObjects:[newItem,...this.state.questionObjects]
-        })
-        
     }
-    
     onBeginChange=(e)=>{
         this.setState({
             dateBegin:e.target.value
@@ -45,22 +23,9 @@ class Interviews extends React.Component {
         })
     }
     onSubmit=(e)=>{
-        var questionsList=this.state.questionObjects;
-        questionsList.pop();
-        var submittedObj={
-            dateBegin: this.state.dateBegin,
-            dateEnd: this.state.dateEnd,
-            submittedQuestions: questionsList,
-            isActivated: this.state.isActivated
-        }
-        console.log(submittedObj.dateBegin,submittedObj.isActivated)
-        this.setState({
-            submittedObj:submittedObj
-        })
+      
     }
-    removeQuestion(item){
-      return;
-    }
+    
     handleClick=(event)=>{
         this.setState(state => ({
             isActivated: !state.isActivated
@@ -71,11 +36,28 @@ class Interviews extends React.Component {
             this.setState({activeClass:true})
         }   
     }
+    handleInputChange = (e, index) => {
+        const { name, value } = e.target;
+        const list = [...this.state.inputList];
+        list[index][name] = value;
+        this.setState({inputList:list})
+      };
+    handleRemoveClick(index){
+        const list = [...this.state.inputList];
+        list.splice(index, 1);
+        this.setState({inputList:list})
+      };
+    handleAddClick(){
+        console.log('jopa');
+        this.setState({
+            inputList: [...this.state.inputList, { category: "", question: "" }]
+        });
+      };
+      
     render (){
         return (
             <div className='app-container col-md-9 ml-sm-auto col-lg-10 px-md-4 mt-5'>
                 <div className='header'>Опрос #1</div>
-                <form onSubmit={this.onSubmit}>
                 <div className='row date-toggle'>
                     <div className='col date-input'>
                         <label for='begin'>Дата начала</label>
@@ -97,13 +79,36 @@ class Interviews extends React.Component {
                 </div> 
                 <div className='subtitle mt-4 mb-3'>Вопросы</div>
                     
-                    {this.state.questionObjects.map((form,index) =>
-                            <div>{form}</div>) }
-                    
+                {this.state.inputList.map((x, i) => {
+                        return (
+                        <div className="d-flex mb-3">
+                            {this.state.inputList.length !== 1 && <img className='reorder-icon ' src='reorder.svg' />}
+                            <input
+                            className='category-input form-control'
+                            name="category"
+                            value={x.category}
+                            placeholder='категория'
+                            onChange={e => this.handleInputChange(e, i)}
+                            />
+                            <input
+                            className="question-input form-control"
+                            name="question"
+                            value={x.question}
+                            placeholder='вопрос'
+                            onChange={e => this.handleInputChange(e, i)}
+                            />
+                            <div className="btn-box mt-2">
+                            {this.state.inputList.length !== 1 && <img className='clear-icon ' src='clear.svg' onClick={() => this.handleRemoveClick(i)} />}
+                            {this.state.inputList.length - 1 === i && <a className='primary-link ml-2' onClick={()=>this.handleAddClick()}>добавить</a>}
+                            </div>
+                        </div>
+                        );
+                    })}
+                    <div style={{ marginTop: 20 }}>{JSON.stringify(this.state.inputList)}</div>
                     <div className='row'>
                         <button type='submit' className='btn primary-btn'>Сохранить</button>
                     </div>
-             </form>
+             
  
             </div>
         );

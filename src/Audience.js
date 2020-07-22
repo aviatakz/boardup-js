@@ -12,7 +12,6 @@ class Audience extends React.Component {
                 groupMembers: []
             }
         }
-        this.state.user.reviews.forEach((item)=>console.log(item.email))
     }
     componentDidMount(){
         const user={
@@ -58,7 +57,7 @@ class Audience extends React.Component {
                     <div className='col members-list'>
                         <label>Оценивает:</label>
                         <ul className='list-unstyled'>
-                        {   this.state.user.reviews && this.state.user.reviews.map(item=>
+                        {this.state.user.reviews && this.state.user.reviews.map(item=>
                             <div className='member-container d-flex mb-2'>
                             <div className='bg-white li'><li>{item.email}</li></div>
                             <img className='clear-icon'src='../clear.svg' onClick={()=>this.removeFromReviews(item)} />

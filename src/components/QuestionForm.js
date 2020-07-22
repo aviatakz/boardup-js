@@ -10,8 +10,8 @@ const QuestionForm= (props)=> {
             </div>
             <div className='col question d-flex flex-row'>
                 <input type='text' required onFocus={ () => props.onFocus()} className='question-input form-control' readOnly={props.isDisabled} placeholder='Вопрос'/>
-                <img className={'clear-icon '+(props.isDisabled ? 'hidden' : 'show')} src='clear.svg'></img>
-            </div>
+               <img className={'clear-icon '+(props.isDisabled ? 'hidden' : 'show')} src='clear.svg' onClick={()=>this.removeQuestion()}></img>
+            </div> 
         </div>
     );
   }

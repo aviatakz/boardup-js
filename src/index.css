@@ -31,7 +31,8 @@ a{
     margin-bottom: 24px;
 }
 .primary-link{
-    color: #00BC00;
+    cursor: pointer;
+    color: #00BC00 !important;
 }
 .subtitle{
     font-style: normal;
@@ -71,6 +72,12 @@ a:hover, a:active{
     box-shadow: 0px 1px 8px rgba(0, 0, 0, 0.05);
     width: 165px;
     height: 40px;
+}
+.category-input{
+    margin-right: 30px;
+}
+.question-input{
+    margin-right: 7px;
 }
 .date-input label, .toggle-content label{
     font-size: 11px;
@@ -174,6 +181,7 @@ a:hover, a:active{
   }
 .clear-icon{
     margin-left: 8px;
+    margin-right: 3px;
 }
 .disabled-form{
     margin-left: 10px;
