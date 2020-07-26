@@ -15,12 +15,12 @@ class Groups extends React.Component {
 
     componentDidMount (){
 
-        var stringified = JSON.stringify(data);
+        const stringified = JSON.stringify(data);
         const usersList = JSON.parse(stringified);
-        var parsedList=[]
+        const parsedList=[]
         
-        for (var i = 0; i < usersList.length; i++) {
-            var user = usersList[i];
+        for (let i = 0; i < usersList.length; i++) {
+            let user = usersList[i];
             parsedList.push(user);
             console.log(user); 
           }       

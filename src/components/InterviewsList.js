@@ -45,7 +45,7 @@ class InterviewsList extends React.Component {
                     <div className='header'>Список опросов</div>
                     </div>
                     <div className='col'>
-                    <NavLink to='/interviews' className='primary-link float-right mt-3'>создать</NavLink>
+                    <NavLink to='/api/interviews/new' className='primary-link float-right mt-3'>создать</NavLink>
                     </div>
                 </div>
                 <div className='row'>
@@ -65,14 +65,14 @@ class InterviewsList extends React.Component {
                             <tbody>
                             {this.state.interviews.map((item) => 
                             <tr>
-                                <td><NavLink to='/interviews'>{'#'+item.id}</NavLink></td>
-                                <td><img src={item.isActivated ? '../tick.svg':'../clear.svg'} /></td>
+                                <td><NavLink to='/api/interviews'>{'#'+item.id}</NavLink></td>
+                                <td><img src={item.isActivated ? '../../icons/tick.svg':'../../icons/clear.svg'} /></td>
                                 <td>{item.dateBegin}</td>
                                 <td>{item.dateEnd}</td>
-                                <td><NavLink to='/interviews'>{item.audience}</NavLink></td>
+                                <td><NavLink to='/api/audience'>{item.audience}</NavLink></td>
                                 <td>{item.questionsAmount}</td>
                                 <td>
-                                    <img src='../navigation.svg' class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" />
+                                    <img src='../../icons/navigation.svg' class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" />
                                     <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                         <NavLink to='/interviews' className="dropdown-item border-bottom">дублировать</NavLink>
                                         <NavLink to='/interviews' className="dropdown-item text-danger">удалить</NavLink>

@@ -1,9 +1,8 @@
 import React from 'react';
 import data from './users';
-import Table from './components/Table'
 import {NavLink} from 'react-router-dom';
 
-class Workers extends React.Component {
+class AudienceList extends React.Component {
 
     constructor (props){
         super(props);
@@ -14,12 +13,12 @@ class Workers extends React.Component {
 
     componentDidMount (){
 
-        var stringified = JSON.stringify(data);
+        const stringified = JSON.stringify(data);
         const usersList = JSON.parse(stringified);
-        var parsedList=[]
+        const parsedList=[]
         
-        for (var i = 0; i < usersList.length; i++) {
-            var user = usersList[i];
+        for (let i = 0; i < usersList.length; i++) {
+            let user = usersList[i];
             parsedList.push(user);
             console.log(user); 
           }       
@@ -53,7 +52,7 @@ class Workers extends React.Component {
                                 <td>{item.group}</td>
                                 <td className={item.target==0 ? 'text-danger':'regular'}>{item.target}</td>
                                 <td className={item.targetedBy==0 ? 'text-danger':'regular'}>{item.targetedBy}</td>
-                            <td><NavLink to='/interviews'>{item.targetedBy==0 ? 'создать':'редактировать'}</NavLink></td>
+                            <td><NavLink to='/api/audience/new'>{item.targetedBy==0 ? 'создать':'редактировать'}</NavLink></td>
                             </tr>
                             )}
                             </tbody>
@@ -66,4 +65,4 @@ class Workers extends React.Component {
     }
 }
 
-  export default Workers;
+  export default AudienceList;

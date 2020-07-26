@@ -60,7 +60,7 @@ class Audience extends React.Component {
                         {this.state.user.reviews && this.state.user.reviews.map(item=>
                             <div className='member-container d-flex mb-2'>
                             <div className='bg-white li'><li>{item.email}</li></div>
-                            <img className='clear-icon'src='../clear.svg' onClick={()=>this.removeFromReviews(item)} />
+                            <img className='clear-icon'src='../../icons/clear.svg' onClick={()=>this.removeFromReviews(item)} />
                             </div>
                             )}
                         </ul>
@@ -72,7 +72,7 @@ class Audience extends React.Component {
                         <ul className='list-unstyled'>
                         {this.state.user.group && this.state.user.groupMembers.map((item)=>
                             <div className='member-container d-flex mb-2'>
-                            <img className='arrow-icon'src='../arrow-left.svg' onClick={()=>this.moveFromGroup(item)}/>
+                            <img className='arrow-icon'src='../../icons/arrow-left.svg' onClick={()=>this.moveFromGroup(item)}/>
                             <div className='bg-white li'><li>{item.email}</li></div>
                             </div>
                             )}
@@ -80,7 +80,7 @@ class Audience extends React.Component {
                         <div>
                         <label>Добавить пользователя:</label>
                         <div className='member-container d-flex mb-2'>
-                        <img className='arrow-icon'src='../arrow-left.svg' />
+                        <img className='arrow-icon'src='../../icons/arrow-left.svg' />
                         <input className='bg-white form-control li' value='some@aviata.me' />
                         </div>
                         </div>

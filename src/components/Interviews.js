@@ -5,11 +5,12 @@ class Interviews extends React.Component {
     constructor (props){
         super(props);
         this.state = {
-            activeClass:true,
+            name:'Опрос #1',
             dateBegin: new Date(),
             dateEnd: new Date(),
             isActivated: true,
-            inputList:[{ category: "", question: "" }]
+            inputList:[{ category: "", question: "" }],
+            audience:[]
         }
     }
     onBeginChange=(e)=>{
@@ -22,19 +23,10 @@ class Interviews extends React.Component {
             dateEnd:e.target.value
         })
     }
-    onSubmit=(e)=>{
-      
-    }
-    
-    handleClick=(event)=>{
+    handleSwitchChange=()=>{
         this.setState(state => ({
             isActivated: !state.isActivated
-          }));  
-        if(this.state.isActivated){
-            this.setState({activeClass:false})
-        } else{
-            this.setState({activeClass:true})
-        }   
+          }));    
     }
     handleInputChange = (e, index) => {
         const { name, value } = e.target;
@@ -48,30 +40,42 @@ class Interviews extends React.Component {
         this.setState({inputList:list})
       };
     handleAddClick(){
-        console.log('jopa');
         this.setState({
             inputList: [...this.state.inputList, { category: "", question: "" }]
         });
       };
-      
+    keyPress(e,i){
+        if(e.keyCode == 13){
+            e.preventDefault();
+            if(i==this.state.inputList.length-1)
+            this.handleAddClick();
+        }
+    }
+    onSubmit=(e)=>{
+        e.preventDefault();
+        const obj=JSON.stringify(this.state);
+        console.log(obj)
+    }
+    
     render (){
         return (
             <div className='app-container col-md-9 ml-sm-auto col-lg-10 px-md-4 mt-5'>
-                <div className='header'>Опрос #1</div>
+                <form onSubmit={(e) => this.onSubmit(e)}>
+                <div className='header'>{this.state.name}</div>
                 <div className='row date-toggle'>
                     <div className='col date-input'>
-                        <label for='begin'>Дата начала</label>
-                        <input type='date' required className='form-control' onChange={this.onBeginChange} id='begin' />
+                        <label htmlFor='begin'>Дата начала</label>
+                        <input type='date' required className='form-control' onChange={(e)=>this.onBeginChange(e)} id='begin' />
                     </div>
                     <div className='col date-input'>
-                        <label for='end'>Дата окончания</label>
-                        <input type='date' required className='form-control' onChange={this.onEndChange} id='end' />
+                        <label htmlFor='end'>Дата окончания</label>
+                        <input type='date' required className='form-control' onChange={(e)=>this.onEndChange(e)} id='end' />
                     </div>
                     <div className='col toggle-content d-flex flex-column'>
-                            <label for='toggle-switch'>Активен?</label>
+                            <label htmlFor='toggle-switch'>Активен?</label>
                             <div className='switch-container mt-3'>
                             <label className="switch" >
-                            <input id='toggle-switch' type="checkbox" onClick={this.handleClick} checked={this.state.isActivated} className="default"/>
+                            <input id='toggle-switch' type="checkbox" onClick={()=>this.handleSwitchChange()} checked={this.state.isActivated} className="default"/>
                             <span className="slider round"></span>
                             </label>
                             </div>
@@ -82,7 +86,7 @@ class Interviews extends React.Component {
                 {this.state.inputList.map((x, i) => {
                         return (
                         <div className="d-flex mb-3">
-                            {this.state.inputList.length !== 1 && <img className='reorder-icon ' src='reorder.svg' />}
+                            {this.state.inputList.length !== 1 && <img className='reorder-icon ' src='../../icons/reorder.svg' />}
                             <input
                             className='category-input form-control'
                             name="category"
@@ -95,20 +99,20 @@ class Interviews extends React.Component {
                             name="question"
                             value={x.question}
                             placeholder='вопрос'
+                            onKeyDown={e => this.keyPress(e,i)}
                             onChange={e => this.handleInputChange(e, i)}
                             />
                             <div className="btn-box mt-2">
-                            {this.state.inputList.length !== 1 && <img className='clear-icon ' src='clear.svg' onClick={() => this.handleRemoveClick(i)} />}
+                            {this.state.inputList.length !== 1 && <img className='clear-icon ' src='../../icons/clear.svg' onClick={() => this.handleRemoveClick(i)} />}
                             {this.state.inputList.length - 1 === i && <a className='primary-link ml-2' onClick={()=>this.handleAddClick()}>добавить</a>}
                             </div>
                         </div>
                         );
                     })}
-                    <div style={{ marginTop: 20 }}>{JSON.stringify(this.state.inputList)}</div>
                     <div className='row'>
-                        <button type='submit' className='btn primary-btn'>Сохранить</button>
+                        <button type='submit' className='btn primary-btn save-btn'>Сохранить</button>
                     </div>
-             
+                    </form>
  
             </div>
         );

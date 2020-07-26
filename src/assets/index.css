@@ -74,6 +74,7 @@ a:hover, a:active{
     height: 40px;
 }
 .category-input{
+    box-shadow: 0px 1px 8px rgba(0, 0, 0, 0.05);
     margin-right: 30px;
 }
 .question-input{
@@ -195,7 +196,9 @@ a:hover, a:active{
     box-shadow: 0px 4px 8px rgba(211, 38, 38, 0.25);
     border-radius: 25px;
 }
-
+.save-btn{
+    margin-left: 10px;
+}
 /**TABLE**/
 thead{
     background-color: #EFF5FB;
