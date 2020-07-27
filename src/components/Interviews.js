@@ -5,7 +5,7 @@ class Interviews extends React.Component {
     constructor (props){
         super(props);
         this.state = {
-            name:'Опрос #1',
+            name:'Опрос',
             dateBegin: new Date(),
             dateEnd: new Date(),
             isActivated: true,

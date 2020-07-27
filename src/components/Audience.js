@@ -1,16 +1,20 @@
 import React from 'react';
+import axios from 'axios';
 
 class Audience extends React.Component {
     constructor (props){
         super(props);
         this.state={
+            users:[],
             user: {
                 id: 1,
                 email: '',
                 reviews: [],
                 group: '',
                 groupMembers: []
-            }
+            },
+            value:'',
+            suggestions:[]
         }
     }
     componentDidMount(){
@@ -23,9 +27,51 @@ class Audience extends React.Component {
         this.setState({
             user:user
         })
+        axios.get('http://46.101.246.71:8000/users/')
+            .then(response => {
+                if (response.data.length > 0) {
+                this.setState({
+                    users: response.data.map(user => user.email),
+                })
+                console.log(this.state.users)
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            })
         this.state.user.reviews.forEach(item=>console.log(item))
     }
-    moveFromGroup(user){
+    onAutoChange = (e) =>{
+        this.items=this.state.users;
+
+        const value=e.target.value;
+        let suggestions=[];
+        if(value.length>0){
+            const regex=new RegExp(`^${value}`,'i');
+            suggestions=this.items.sort().filter(v=>regex.test(v));
+        }
+
+        this.setState(()=>({suggestions, value:value}));
+        
+    }
+    renderSuggestions(){
+        const {suggestions}=this.state;
+        if(suggestions.length===0){
+            return null;
+        }
+        return(
+            <ul>
+                {suggestions.map((item)=><li onClick={()=>this.suggestionSelected(item)}>{item}</li>)}
+            </ul>
+        )
+    }
+    suggestionSelected = (value) =>{
+        this.setState(()=>({
+            value:value,
+            suggestions:[]
+        }))
+    }
+    moveFromGroup = (user) => {
         this.setState({
             user: {
             ...this.state.user,
@@ -38,7 +84,7 @@ class Audience extends React.Component {
           this.state.user.reviews.forEach(item=>console.log(item))
           this.state.user.groupMembers.forEach(item=>console.log(item))
     }
-    removeFromReviews(user){
+    removeFromReviews = (user) => {
         this.setState({
             user: {
             ...this.state.user,
@@ -47,7 +93,16 @@ class Audience extends React.Component {
             })
          }});
     }
+    submitInput(){
+        this.moveFromGroup(this.state.value)
+    }
     render (){
+        const { value, suggestions } = this.state;
+        const inputProps = {
+            placeholder: 'some@aviata.me',
+            value,
+            onChange: this.onChange
+          };
         return (
             <div className='app-container col-md-9 ml-sm-auto col-lg-10 px-md-4 mt-5'>
                 <div className='row'>
@@ -79,9 +134,12 @@ class Audience extends React.Component {
                         </ul>
                         <div>
                         <label>Добавить пользователя:</label>
-                        <div className='member-container d-flex mb-2'>
-                        <img className='arrow-icon'src='../../icons/arrow-left.svg' />
-                        <input className='bg-white form-control li' value='some@aviata.me' />
+                        <div className='member-container d-flex align-items-start mb-2'>
+                        <img className='arrow-icon mt-2'src='../../icons/arrow-left.svg' onClick={()=>this.submitInput()}/>
+                        <div className='autocomplete'>
+                        <input className='bg-white form-control li' value={this.state.value} placeholder='some@aviata.me' onChange={e=>this.onAutoChange(e)} />
+                        {this.renderSuggestions()}
+                        </div>
                         </div>
                         </div>
                     </div>

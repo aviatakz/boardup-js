@@ -254,3 +254,22 @@ tbody tr:first-child td{
 .members-list .arrow-icon{
     margin-left: -32px;
 }
+.autocomplete ul{
+    list-style-type: none;
+    text-align: center;
+    padding: 5px 0;
+    margin-top: 3px;
+    box-shadow: 0px 1px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(155, 155, 155, 0.3);
+    border-radius: 4px;
+}
+.autocomplete li{
+    cursor: pointer;
+    padding: 5px;
+}
+.autocomplete li:hover{
+    background-color: white;
+    transition: 0.5s;
+    text-decoration: underline;
+}
+  
