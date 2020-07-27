@@ -1,5 +1,5 @@
 import React from 'react';
-
+import axios from 'axios';
 
 class Interviews extends React.Component {
     constructor (props){
@@ -9,9 +9,23 @@ class Interviews extends React.Component {
             dateBegin: new Date(),
             dateEnd: new Date(),
             isActivated: true,
-            inputList:[{ category: "", question: "" }],
-            audience:[]
+            inputList:[{ category: 1, question: "" }],
+            audience:[],
+            categories:[]
         }
+    }
+    componentDidMount(){
+        axios.get('http://46.101.246.71:8000/categories/')
+            .then(response => {
+                if (response.data.length > 0) {
+                this.setState({
+                    categories: response.data.map(cat => cat)
+                })
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            })
     }
     onBeginChange=(e)=>{
         this.setState({
@@ -34,6 +48,13 @@ class Interviews extends React.Component {
         list[index][name] = value;
         this.setState({inputList:list})
       };
+    handleSelectChange = (e, index) => {
+        const name = e.target.name;
+        const value = parseInt(e.target.value);
+        const list = [...this.state.inputList];
+        list[index][name] = value;
+        this.setState({inputList:list})
+      };
     handleRemoveClick(index){
         const list = [...this.state.inputList];
         list.splice(index, 1);
@@ -41,7 +62,7 @@ class Interviews extends React.Component {
       };
     handleAddClick(){
         this.setState({
-            inputList: [...this.state.inputList, { category: "", question: "" }]
+            inputList: [...this.state.inputList, { category: 1, question: "" }]
         });
       };
     keyPress(e,i){
@@ -55,6 +76,7 @@ class Interviews extends React.Component {
         e.preventDefault();
         const obj=JSON.stringify(this.state);
         console.log(obj)
+        console.log(this.state.inputList)
     }
     
     render (){
@@ -87,17 +109,18 @@ class Interviews extends React.Component {
                         return (
                         <div className="d-flex mb-3">
                             {this.state.inputList.length !== 1 && <img className='reorder-icon ' src='../../icons/reorder.svg' />}
-                            <input
-                            className='category-input form-control'
+                            <select 
+                            className="custom-select category-input"
                             name="category"
                             value={x.category}
-                            placeholder='категория'
-                            onChange={e => this.handleInputChange(e, i)}
-                            />
+                            onChange={e => this.handleSelectChange(e, i)}>
+                                {this.state.categories && this.state.categories.map(cat=> <option value={cat.id}>{cat.name}</option>)}
+                            </select>
                             <input
                             className="question-input form-control"
                             name="question"
                             value={x.question}
+                            required
                             placeholder='вопрос'
                             onKeyDown={e => this.keyPress(e,i)}
                             onChange={e => this.handleInputChange(e, i)}

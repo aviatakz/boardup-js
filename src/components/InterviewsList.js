@@ -72,7 +72,7 @@ class InterviewsList extends React.Component {
                                 <td><NavLink to='/api/audience'>{item.audience}</NavLink></td>
                                 <td>{item.questionsAmount}</td>
                                 <td>
-                                    <img src='../../icons/navigation.svg' class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" />
+                                    <img src='../../icons/navigation.svg' className="dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" />
                                     <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                         <NavLink to='/interviews' className="dropdown-item border-bottom">дублировать</NavLink>
                                         <NavLink to='/interviews' className="dropdown-item text-danger">удалить</NavLink>
