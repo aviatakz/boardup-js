@@ -15,20 +15,23 @@ body {
 .form-control:focus{
     box-shadow: 0 0 1px #00BC00;
 }
-input[type=date]:required:invalid::-webkit-datetime-edit {
-    color: transparent;
-}
-input[type=date]:focus::-webkit-datetime-edit {
-    color: black !important;
-}
+
 a{
     color: black;
+    cursor: pointer;
+}
+a:active{
+    background-color: white !important;
 }
 .header{
     font-weight: 600;
     font-size: 32px;
     line-height: 39px;
     margin-bottom: 24px;
+}
+.primary-link{
+    cursor: pointer;
+    color: #00BC00 !important;
 }
 .subtitle{
     font-style: normal;
@@ -69,12 +72,19 @@ a:hover, a:active{
     width: 165px;
     height: 40px;
 }
+.category-input{
+    box-shadow: 0px 1px 8px rgba(0, 0, 0, 0.05);
+    margin-right: 30px;
+}
+.question-input{
+    margin-right: 7px;
+}
 .date-input label, .toggle-content label{
     font-size: 11px;
     padding-left: 15px;
     margin-bottom: 0.1rem !important;
 }
-.date-input, .toggle-content, .question{
+.date-input, .toggle-content, .question, .members-list{
     flex-grow: 0 !important;
     padding-right: 15px;
 }
@@ -166,11 +176,12 @@ a:hover, a:active{
       width: 521px; 
       height: 40px;
   }
-  .reorder-icon{
+.reorder-icon, .arrow-icon{
     margin-right: 8px;
   }
-  .clear-icon{
+.clear-icon{
     margin-left: 8px;
+    margin-right: 3px;
 }
 .disabled-form{
     margin-left: 10px;
@@ -184,7 +195,9 @@ a:hover, a:active{
     box-shadow: 0px 4px 8px rgba(211, 38, 38, 0.25);
     border-radius: 25px;
 }
-
+.save-btn{
+    margin-left: 10px;
+}
 /**TABLE**/
 thead{
     background-color: #EFF5FB;
@@ -195,7 +208,6 @@ th{
     border-bottom: none !important;
 }
 tbody tr:nth-child(odd) {background-color: #FAFCFE;}
-thead th:first-child {padding-right: 180px;}
 table{
     border: 1px solid rgba(0, 0, 0, .1);
 }
@@ -208,6 +220,56 @@ tbody tr:first-child td{
 .hidden{
     display: none;
 }
-.red{
-    color:red;
+.dropdown-item{
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 15px;
+    color: #333333;
 }
+.dropdown-toggle, img{
+    cursor: pointer;
+}
+.member-container, .li{
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+    display: flex;
+    align-items: center;
+    color: #828282;
+}
+.li{
+    width: 220px;
+    height: 40px;
+    justify-content: center;
+    border-radius: 4px;
+    box-shadow: 0px 1px 8px rgba(0, 0, 0, 0.05);
+}
+.members-list:first-child{
+    margin-right: 140px;
+    padding-left: 0px;
+}
+.members-list .arrow-icon{
+    margin-left: -32px;
+}
+.autocomplete ul{
+    list-style-type: none;
+    text-align: center;
+    padding: 5px 0;
+    margin-top: 3px;
+    box-shadow: 0px 1px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(155, 155, 155, 0.3);
+    border-radius: 4px;
+}
+.autocomplete li{
+    cursor: pointer;
+    padding: 5px;
+}
+.autocomplete li:hover{
+    background-color: white;
+    transition: 0.5s;
+    text-decoration: underline;
+}
+
+  
