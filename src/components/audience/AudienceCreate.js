@@ -6,19 +6,17 @@ class Audience extends React.Component {
         super(props);
         this.state={
             users:[],
-            user: {
-                id: 1,
-                email: '',
-                reviews: [],
-                group: '',
-                groupMembers: []
-            },
+            survey_id: this.props.match.params.survey_id,
+            user_id: this.props.match.params.user_id,
+            user:{},
+            reviews: [],
+            groupMembers: [],
             value:'',
             suggestions:[]
         }
     }
     componentDidMount(){
-        const user={
+       /*  const user={
             email: 'vlad@aviata.me',
             reviews: [{email:'ksenya.v@aviata.kz'},{email:'alena@aviata.me'},{email:'dauren@chocotravel.com'},{email:'david@chocotravel.com'}],
             group: 'top',
@@ -26,20 +24,31 @@ class Audience extends React.Component {
         }
         this.setState({
             user:user
-        })
+        })*/
+        axios.get(`http://46.101.246.71:8000/users/${this.state.user_id}`)
+            .then(response => {
+                this.setState({
+                    user:response.data
+                })
+                console.log(this.state.user)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+            
         axios.get('http://46.101.246.71:8000/users/')
             .then(response => {
                 if (response.data.length > 0) {
                 this.setState({
-                    users: response.data.map(user => user.email),
+                    users: response.data,
                 })
-                console.log(this.state.users)
                 }
             })
             .catch((error) => {
                 console.log(error);
             })
-        this.state.user.reviews.forEach(item=>console.log(item))
+
+        
     }
     onAutoChange = (e) =>{
         this.items=this.state.users;
@@ -61,7 +70,7 @@ class Audience extends React.Component {
         }
         return(
             <ul>
-                {suggestions.map((item)=><li onClick={()=>this.suggestionSelected(item)}>{item}</li>)}
+                {suggestions.map((item)=><li onClick={()=>this.suggestionSelected(item)}>{item.email}</li>)}
             </ul>
         )
     }
@@ -115,7 +124,7 @@ class Audience extends React.Component {
                         {this.state.user.reviews && this.state.user.reviews.map(item=>
                             <div className='member-container d-flex mb-2'>
                             <div className='bg-white li'><li>{item.email}</li></div>
-                            <img className='clear-icon'src='../../icons/clear.svg' onClick={()=>this.removeFromReviews(item)} />
+                            <img className='clear-icon'src='../../../icons/clear.svg' onClick={()=>this.removeFromReviews(item)} />
                             </div>
                             )}
                         </ul>
@@ -123,11 +132,11 @@ class Audience extends React.Component {
                     </div>
                     
                     <div className='col members-list'>
-                        <label>Группа <b>{this.state.user.group}</b>:</label>
+                        <label>Предложенные:</label>
                         <ul className='list-unstyled'>
                         {this.state.user.group && this.state.user.groupMembers.map((item)=>
                             <div className='member-container d-flex mb-2'>
-                            <img className='arrow-icon'src='../../icons/arrow-left.svg' onClick={()=>this.moveFromGroup(item)}/>
+                            <img className='arrow-icon'src='../../../icons/arrow-left.svg' onClick={()=>this.moveFromGroup(item)}/>
                             <div className='bg-white li'><li>{item.email}</li></div>
                             </div>
                             )}
@@ -135,7 +144,7 @@ class Audience extends React.Component {
                         <div>
                         <label>Добавить пользователя:</label>
                         <div className='member-container d-flex align-items-start mb-2'>
-                        <img className='arrow-icon mt-2'src='../../icons/arrow-left.svg' onClick={()=>this.submitInput()}/>
+                        <img className='arrow-icon mt-2'src='../../../icons/arrow-left.svg' onClick={()=>this.submitInput()}/>
                         <div className='autocomplete'>
                         <input className='bg-white form-control li' value={this.state.value} placeholder='some@aviata.me' onChange={e=>this.onAutoChange(e)} />
                         {this.renderSuggestions()}

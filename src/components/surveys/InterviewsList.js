@@ -1,42 +1,38 @@
 import React from 'react';
 import {NavLink} from 'react-router-dom';
 import Moment from 'react-moment';
+import axios from 'axios'
 
 class InterviewsList extends React.Component {
     constructor (props){
         super(props);
         this.state = {
-            interviews: [
-            { id : 1,
-              isActivated: true,
-              dateBegin: <Moment format="DD.MM.YYYY">
-              2020-04-19
-          </Moment>,
-              dateEnd: <Moment format="DD.MM.YYYY">
-              2020-04-25
-          </Moment>,
-              audience: 180,
-              questionsAmount: 17
-            },
-            {
-                id : 2,
-                isActivated: false,
-                dateBegin: <Moment format="DD.MM.YYYY">
-                2020-04-25
-            </Moment>,
-                dateEnd: <Moment format="DD.MM.YYYY">
-                2020-04-30
-            </Moment>,
-                audience: 190,
-                questionsAmount: 19
-            }
-          ]
+            interviews: []
         }
     }
 
     componentDidMount (){
-        
+        axios.get('http://46.101.246.71:8000/surveys/')
+        .then(response => {
+            if (response.data.length > 0) {
+            this.setState({
+                interviews: response.data.map(int => int)
+            })
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        })
     }
+    removeFromList(index, id){
+        const list = [...this.state.interviews];
+        list.splice(index, 1);
+        axios.delete(`http://46.101.246.71:8000/surveys/${id}`)
+            .then(res => {
+                console.log(res.data);
+                this.setState({interviews:list})
+            })
+      };
     render (){
         return (
             <div className='app-container col-md-9 ml-sm-auto col-lg-10 px-md-4 mt-5'>
@@ -45,7 +41,7 @@ class InterviewsList extends React.Component {
                     <div className='header'>Список опросов</div>
                     </div>
                     <div className='col'>
-                    <NavLink to='/api/interviews/new' className='primary-link float-right mt-3'>создать</NavLink>
+                    <NavLink to='/interviews/new' className='primary-link float-right mt-3'>создать</NavLink>
                     </div>
                 </div>
                 <div className='row'>
@@ -63,19 +59,19 @@ class InterviewsList extends React.Component {
                                 </tr>
                             </thead>                         
                             <tbody>
-                            {this.state.interviews.map((item) => 
-                            <tr>
-                                <td><NavLink to='/api/interviews'>{'#'+item.id}</NavLink></td>
-                                <td><img src={item.isActivated ? '../../icons/tick.svg':'../../icons/clear.svg'} /></td>
-                                <td>{item.dateBegin}</td>
-                                <td>{item.dateEnd}</td>
-                                <td><NavLink to='/api/audience'>{item.audience}</NavLink></td>
-                                <td>{item.questionsAmount}</td>
+                            {this.state.interviews && this.state.interviews.map((item, i) => 
+                            <tr key={item.id}>
+                                <td><NavLink to={"interviews/edit/"+item.id}>{'#'+item.id}</NavLink></td>
+                                <td><img src={item.is_active ? '../../icons/tick.svg':'../../icons/clear.svg'} /></td>
+                                <td><Moment format="DD.MM.YYYY">{item.start_date}</Moment></td>
+                                <td><Moment format="DD.MM.YYYY">{item.end_date}</Moment></td>
+                                <td><NavLink to={'audience/'+item.id}>посмотреть</NavLink></td>
+                                <td>{item.questions && item.questions.length}</td>
                                 <td>
                                     <img src='../../icons/navigation.svg' className="dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" />
                                     <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                        <NavLink to='/interviews' className="dropdown-item border-bottom">дублировать</NavLink>
-                                        <NavLink to='/interviews' className="dropdown-item text-danger">удалить</NavLink>
+                                        <a className="dropdown-item border-bottom">дублировать</a>
+                                        <a className="dropdown-item text-danger" onClick={() => this.removeFromList(i, item.id)}>удалить</a>
                                     </div>
                                 </td>
                             </tr>

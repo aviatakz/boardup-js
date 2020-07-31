@@ -15,14 +15,13 @@ body {
 .form-control:focus{
     box-shadow: 0 0 1px #00BC00;
 }
-input[type=date]:required:invalid::-webkit-datetime-edit {
-    color: transparent;
-}
-input[type=date]:focus::-webkit-datetime-edit {
-    color: black !important;
-}
+
 a{
     color: black;
+    cursor: pointer;
+}
+a:active{
+    background-color: white !important;
 }
 .header{
     font-weight: 600;

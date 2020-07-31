@@ -19,7 +19,7 @@ class Navbar extends React.Component {
                     </li>
                     
                     <li className="nav-item ml-2">
-                        <NavLink activeStyle={this.activeStyle} className='nav-link' exact to='/api/interviews'>Опросы</NavLink>
+                        <NavLink activeStyle={this.activeStyle} className='nav-link' exact to='/interviews'>Опросы</NavLink>
                     </li>
                     <li className="nav-item ml-2">
                         <NavLink activeStyle={this.activeStyle} className='nav-link' to='/workers'>Пользователи</NavLink>

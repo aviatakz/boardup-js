@@ -1,5 +1,5 @@
 import React from 'react';
-import data from './users';
+import axios from 'axios';
 import {NavLink} from 'react-router-dom';
 
 class AudienceList extends React.Component {
@@ -7,24 +7,24 @@ class AudienceList extends React.Component {
     constructor (props){
         super(props);
         this.state = {
-            users: []
+            users: [],
+            survey_id:this.props.match.params.survey_id
         }
     }
 
     componentDidMount (){
 
-        const stringified = JSON.stringify(data);
-        const usersList = JSON.parse(stringified);
-        const parsedList=[]
-        
-        for (let i = 0; i < usersList.length; i++) {
-            let user = usersList[i];
-            parsedList.push(user);
-            console.log(user); 
-          }       
-
-        this.setState({users:parsedList});
-        this.state.users.forEach((item) => console.log(item.username))
+        axios.get('http://46.101.246.71:8000/users/')
+        .then(response => {
+            if (response.data.length > 0) {
+            this.setState({
+                users: response.data.map(u => u)
+            })
+            console.log(this.props)}
+        })
+        .catch((error) => {
+            console.log(error);
+        })
         
     }
 
@@ -38,21 +38,18 @@ class AudienceList extends React.Component {
                             <thead>
                                 <tr>
                                     <th>пользователь</th>
-                                    <th>группы</th>
                                     <th>он оценивает</th>
                                     <th>его оценивают</th>
                                     <th></th>
                                 </tr>
                             </thead>                         
-                        {/*Добавить удаление, редактирование, сверху кнопка создания нового юзера */}
                             <tbody>
                             {this.state.users.map((item) => 
-                            <tr>
+                            <tr key={item.id}>
                                 <td>{item.email}</td>
-                                <td>{item.group}</td>
-                                <td className={item.target==0 ? 'text-danger':'regular'}>{item.target}</td>
-                                <td className={item.targetedBy==0 ? 'text-danger':'regular'}>{item.targetedBy}</td>
-                            <td><NavLink to='/api/audience/new'>{item.targetedBy==0 ? 'создать':'редактировать'}</NavLink></td>
+                                <td>-</td>
+                                <td>-</td>
+                            <td><NavLink to={'/audience/'+this.state.survey_id+'/'+item.id+'/new'}>создать</NavLink></td>
                             </tr>
                             )}
                             </tbody>
