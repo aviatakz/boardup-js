@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 
-class Audience extends React.Component {
+class AudienceCreate extends React.Component {
     constructor (props){
         super(props);
         this.state={
@@ -11,30 +11,37 @@ class Audience extends React.Component {
             user:{},
             reviews: [],
             groupMembers: [],
-            value:'',
+            value:{email:''},
             suggestions:[]
         }
     }
     componentDidMount(){
-       /*  const user={
-            email: 'vlad@aviata.me',
-            reviews: [{email:'ksenya.v@aviata.kz'},{email:'alena@aviata.me'},{email:'dauren@chocotravel.com'},{email:'david@chocotravel.com'}],
-            group: 'top',
-            groupMembers:[{email: 'kanat@aviata.me'},{email:'shaken@chocotravel.com'},{email:'ayuna@aviata.me'}]
-        }
-        this.setState({
-            user:user
-        })*/
         axios.get(`http://46.101.246.71:8000/users/${this.state.user_id}`)
             .then(response => {
                 this.setState({
                     user:response.data
                 })
-                console.log(this.state.user)
             })
-            .catch(err => {
-                console.log(err)
-            })
+            .then(res=>{
+                const info=this.state.user.groups.map(g=>g.id);
+                const PromiseArr = [];
+                let results=[]
+                for (let i = 0; i < info.length; i++){
+        
+                let url = "http://46.101.246.71:8000/users/?groups="+ info[i]
+                PromiseArr.push(
+                axios.get(url).then(result=>results=result.data))
+                }
+        
+                Promise.all(PromiseArr).then(res => {
+                    this.setState({
+                        groupMembers: results.map(r=>({ ...r, isInGroup: true}))
+                    })
+                    console.log(results)
+                    console.log(this.state.groupMembers)
+                    this.state.groupMembers.forEach(i=>console.log(i.email))
+                });}
+            ).catch(err => {console.log(err) })
             
         axios.get('http://46.101.246.71:8000/users/')
             .then(response => {
@@ -47,17 +54,15 @@ class Audience extends React.Component {
             .catch((error) => {
                 console.log(error);
             })
-
-        
+      
     }
     onAutoChange = (e) =>{
-        this.items=this.state.users;
-
+        this.items=this.state.users.map(u=>u);
         const value=e.target.value;
         let suggestions=[];
         if(value.length>0){
             const regex=new RegExp(`^${value}`,'i');
-            suggestions=this.items.sort().filter(v=>regex.test(v));
+            suggestions=this.items.sort().filter(v=>regex.test(v.email));
         }
 
         this.setState(()=>({suggestions, value:value}));
@@ -82,28 +87,28 @@ class Audience extends React.Component {
     }
     moveFromGroup = (user) => {
         this.setState({
-            user: {
-            ...this.state.user,
-            groupMembers: this.state.user.groupMembers.filter(function(item) {
+           
+            groupMembers: this.state.groupMembers.filter(function(item) {
               return item !== user;
             }),
-            reviews: [...this.state.user.reviews, user]
-         }});
-        
-          this.state.user.reviews.forEach(item=>console.log(item))
-          this.state.user.groupMembers.forEach(item=>console.log(item))
+            reviews: [...this.state.reviews, user]
+         });
     }
     removeFromReviews = (user) => {
         this.setState({
-            user: {
-            ...this.state.user,
-            reviews: this.state.user.reviews.filter(function(item) {
+           
+            reviews: this.state.reviews.filter(function(item) {
               return item !== user;
-            })
-         }});
+            }),
+            groupMembers: user.isInGroup ? [...this.state.groupMembers, user] : this.state.groupMembers
+         });
     }
     submitInput(){
         this.moveFromGroup(this.state.value)
+    }
+    saveAudience(){
+        const reviews=this.state.reviews;
+        reviews.forEach(function(v){ delete v.isInGroup });
     }
     render (){
         const { value, suggestions } = this.state;
@@ -121,20 +126,20 @@ class Audience extends React.Component {
                     <div className='col members-list'>
                         <label>Оценивает:</label>
                         <ul className='list-unstyled'>
-                        {this.state.user.reviews && this.state.user.reviews.map(item=>
+                        {this.state.reviews && this.state.reviews.map(item=>
                             <div className='member-container d-flex mb-2'>
                             <div className='bg-white li'><li>{item.email}</li></div>
                             <img className='clear-icon'src='../../../icons/clear.svg' onClick={()=>this.removeFromReviews(item)} />
                             </div>
                             )}
                         </ul>
-                        <button type='submit' className='btn primary-btn mt-2'>Сохранить</button>
+                        <button type='submit' className='btn primary-btn mt-2' onClick={()=>this.saveAudience()}>Сохранить</button>
                     </div>
                     
                     <div className='col members-list'>
                         <label>Предложенные:</label>
                         <ul className='list-unstyled'>
-                        {this.state.user.group && this.state.user.groupMembers.map((item)=>
+                        {this.state.groupMembers && this.state.groupMembers.map((item)=>
                             <div className='member-container d-flex mb-2'>
                             <img className='arrow-icon'src='../../../icons/arrow-left.svg' onClick={()=>this.moveFromGroup(item)}/>
                             <div className='bg-white li'><li>{item.email}</li></div>
@@ -146,7 +151,7 @@ class Audience extends React.Component {
                         <div className='member-container d-flex align-items-start mb-2'>
                         <img className='arrow-icon mt-2'src='../../../icons/arrow-left.svg' onClick={()=>this.submitInput()}/>
                         <div className='autocomplete'>
-                        <input className='bg-white form-control li' value={this.state.value} placeholder='some@aviata.me' onChange={e=>this.onAutoChange(e)} />
+                        <input className='bg-white form-control li' value={this.state.value.email} placeholder='some@aviata.me' onChange={e=>this.onAutoChange(e)} />
                         {this.renderSuggestions()}
                         </div>
                         </div>
@@ -158,4 +163,4 @@ class Audience extends React.Component {
     }
 }
 
-  export default Audience;
+  export default AudienceCreate;

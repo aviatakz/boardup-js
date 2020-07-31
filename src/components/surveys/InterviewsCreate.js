@@ -13,8 +13,7 @@ class InterviewsCreate extends React.Component {
             order:1,
             audience:[],
             categories:[],
-            submittedSurveyId:1,
-            que:[]
+            submittedSurveyId:1
         }
     }
     componentDidMount(){

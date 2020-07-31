@@ -20,7 +20,7 @@ a{
     color: black;
     cursor: pointer;
 }
-a:active{
+.active-click:active{
     background-color: white !important;
 }
 .header{

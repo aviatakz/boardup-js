@@ -71,7 +71,7 @@ class InterviewsList extends React.Component {
                                     <img src='../../icons/navigation.svg' className="dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" />
                                     <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                         <a className="dropdown-item border-bottom">дублировать</a>
-                                        <a className="dropdown-item text-danger" onClick={() => this.removeFromList(i, item.id)}>удалить</a>
+                                        <a className="dropdown-item text-danger active-click" onClick={() => this.removeFromList(i, item.id)}>удалить</a>
                                     </div>
                                 </td>
                             </tr>
