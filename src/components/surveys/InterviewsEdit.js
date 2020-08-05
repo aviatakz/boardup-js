@@ -168,7 +168,7 @@ class InterviewsEdit extends React.Component {
         return (
             <div className='app-container col-md-9 ml-sm-auto col-lg-10 px-md-4 mt-5'>
                 <form onSubmit={e => this.onSubmit(e)}>
-                    <div className='header'>Редактировать {this.state.name}</div>
+                    <div className='header'>Редактировать {this.state.name+' #'+this.state.id}</div>
                     <div className='row date-toggle'>
                         <div className='col date-input'>
                             <label htmlFor='begin'>Дата начала</label>

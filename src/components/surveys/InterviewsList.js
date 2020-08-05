@@ -64,7 +64,7 @@ class InterviewsList extends React.Component {
                             <tbody>
                                 {this.state.interviews && this.state.interviews.map((item, i) =>
                                     <tr key={item.id}>
-                                        <td><NavLink to={"interviews/edit/" + item.id}>{'#' + item.id}</NavLink></td>
+                                        <td><NavLink to={"interviews/" + item.id + '/edit'}>{'#' + item.id}</NavLink></td>
                                         <td><img src={item.is_active ? '../../icons/tick.svg' : '../../icons/clear.svg'} /></td>
                                         <td><Moment format="DD.MM.YYYY">{item.start_date}</Moment></td>
                                         <td><Moment format="DD.MM.YYYY">{item.end_date}</Moment></td>

@@ -111,7 +111,7 @@ class AudienceCreate extends React.Component {
         reviews.forEach(function (v) { delete v.isInGroup });
         const targets=reviews;
 
-        const interviewsArr=targets.map(t=> ({user_id:parseInt(this.state.user_id), target_user_id:t.id, survey_id:parseInt(this.state.survey_id), comment:'ok'}))
+        const interviewsArr=targets.map(t=> ({user_id:parseInt(this.state.user_id), target_user_id:t.id, target_user:t, survey_id:parseInt(this.state.survey_id), comment:'ok'}))
         interviewsArr.forEach(e=>console.log(e))
 
         axios.post(`${api}/interviews/create_interviews/`, interviewsArr)
@@ -131,7 +131,7 @@ class AudienceCreate extends React.Component {
         return (
             <div className='app-container col-md-9 ml-sm-auto col-lg-10 px-md-4 mt-5'>
                 <div className='row'>
-                    <div className='header'>Аудитория {this.state.user && this.state.user.email}:</div>
+                    <div className='header'>Аудитория {this.state.user && this.state.user.email} #{this.state.survey_id}:</div>
                 </div>
                 <div className='row'>
                     <div className='col members-list'>

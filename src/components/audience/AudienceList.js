@@ -37,7 +37,7 @@ class AudienceList extends React.Component {
             <div className='app-container col-md-9 ml-sm-auto col-lg-10 px-md-4 mt-5'>
                 <div className='row'>
                     <div className='col'>
-                        <div className='header'>Аудитория опроса</div>
+                    <div className='header'>Аудитория опроса #{this.state.survey_id}</div>
                         <table className='table'>
                             <thead>
                                 <tr>
@@ -52,7 +52,7 @@ class AudienceList extends React.Component {
                                     <tr key={item.id}>
                                         <td>{item.email}</td>
                                         <td>-</td>
-                                        <td>-</td>
+                                        <td><NavLink to={'/audience/' + this.state.survey_id + '/' + item.id + '/edit'}>редактировать</NavLink></td>
                                         <td><NavLink to={'/audience/' + this.state.survey_id + '/' + item.id + '/new'}>создать</NavLink></td>
                                     </tr>
                                 )}
