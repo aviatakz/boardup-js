@@ -109,6 +109,17 @@ class AudienceCreate extends React.Component {
     saveAudience() {
         const reviews = this.state.reviews;
         reviews.forEach(function (v) { delete v.isInGroup });
+        const targets=reviews;
+
+        const interviewsArr=targets.map(t=> ({user_id:parseInt(this.state.user_id), target_user_id:t.id, survey_id:parseInt(this.state.survey_id), comment:'ok'}))
+        interviewsArr.forEach(e=>console.log(e))
+
+        axios.post(`${api}/interviews/create_interviews/`, interviewsArr)
+            .then(res=>{
+                console.log(res)
+                window.location='/audience/'+this.state.survey_id
+            })
+            .catch(err=>console.log(err))
     }
     render() {
         const { value, suggestions } = this.state;
