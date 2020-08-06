@@ -3,8 +3,7 @@ import axios from 'axios';
 import { apiUrl } from '../api';
 
 const api = apiUrl;
-
-class AudienceCreate extends React.Component {
+class AudienceEdit extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -15,10 +14,21 @@ class AudienceCreate extends React.Component {
             reviews: [],
             groupMembers: [],
             value: { email: '' },
-            suggestions: []
+            suggestions: [],
+            interviewsArr: []
         }
     }
     componentDidMount() {
+        axios.get(`${api}/interviews/?user=${this.state.user_id}&?survey=${this.state.survey_id}`)
+            .then(res => {
+                this.setState({
+                    interviewsArr: res.data,
+                    reviews: res.data.map(r => r.target_user),
+                })
+                this.state.interviewsArr.forEach(e => console.log(e))
+            })
+            .catch(err => console.log(err))
+
         axios.get(`${api}/users/${this.state.user_id}`)
             .then(response => {
                 this.setState({
@@ -40,12 +50,14 @@ class AudienceCreate extends React.Component {
                     this.setState({
                         groupMembers: results.map(r => ({ ...r, isInGroup: true })).filter(f => f.id != this.state.user_id)
                     })
-                    console.log(results)
-                    console.log(this.state.groupMembers)
-                    this.state.groupMembers.forEach(i => console.log(i.email))
+                    this.state.groupMembers.forEach(i => console.log(i))
                 });
             }
-            ).catch(err => { console.log(err) })
+            )
+
+            .catch(err => { console.log(err) })
+
+
 
         axios.get(`${api}/users/`)
             .then(response => {
@@ -96,6 +108,19 @@ class AudienceCreate extends React.Component {
         });
     }
     removeFromReviews = user => {
+        const ints = this.state.interviewsArr;
+        const isInArray = ints.find(function (el) { return el.target_user_id === user.id }) !== undefined;
+        if (isInArray) {
+            const result = ints.find(obj => {
+                return obj.target_user_id === user.id
+            })
+            console.log(result)
+            axios.delete(`${api}/interviews/${result.id}`)
+                .then(res => {
+                    console.log(res.data);
+                })
+        }
+
         this.setState({
             reviews: this.state.reviews.filter(function (item) {
                 return item !== user;
@@ -109,17 +134,26 @@ class AudienceCreate extends React.Component {
     saveAudience() {
         const reviews = this.state.reviews;
         reviews.forEach(function (v) { delete v.isInGroup });
-        const targets=reviews;
 
-        const interviewsArr=targets.map(t=> ({user_id:parseInt(this.state.user_id), target_user_id:t.id, target_user:t, survey_id:parseInt(this.state.survey_id), comment:'ok'}))
-        interviewsArr.forEach(e=>console.log(e))
+        const ints = this.state.interviewsArr;
 
-        axios.post(`${api}/interviews/create_interviews/`, interviewsArr)
-            .then(res=>{
+        const result = reviews.filter(function (item) {
+            return ints.find(function (item2) {
+                return item.id == item2.target_user_id;
+            }) == undefined;
+        });
+        result.forEach(e => console.log(e))
+
+        const targets = result;
+
+        const interviews = targets.map(t => ({ user_id: parseInt(this.state.user_id), target_user_id: t.id, survey_id: parseInt(this.state.survey_id), comment: 'ok' }))
+
+        axios.post(`${api}/interviews/create_interviews/`, interviews)
+            .then(res => {
                 console.log(res)
-                window.location='/audience/'+this.state.survey_id
+                window.location = '/audience/' + this.state.survey_id
             })
-            .catch(err=>console.log(err))
+            .catch(err => console.log(err))
     }
     render() {
         const { value, suggestions } = this.state;
@@ -131,7 +165,7 @@ class AudienceCreate extends React.Component {
         return (
             <div className='app-container col-md-9 ml-sm-auto col-lg-10 px-md-4 mt-5'>
                 <div className='row'>
-                    <div className='header'>Аудитория {this.state.user && this.state.user.email} #{this.state.survey_id}:</div>
+                    <div className='header'>Редактировать аудиторию {this.state.user && this.state.user.email} #{this.state.survey_id}:</div>
                 </div>
                 <div className='row'>
                     <div className='col members-list'>
@@ -174,4 +208,4 @@ class AudienceCreate extends React.Component {
     }
 }
 
-export default AudienceCreate;
+export default AudienceEdit;

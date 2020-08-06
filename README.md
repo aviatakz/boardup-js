@@ -1,1 +1,2 @@
-# boardup-js
+cd src </br>
+npm start
