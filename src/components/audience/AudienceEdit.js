@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { apiUrl } from '../api';
+import Dots from '../loader'
 
 const api = apiUrl;
 class AudienceEdit extends React.Component {
@@ -15,11 +16,12 @@ class AudienceEdit extends React.Component {
             groupMembers: [],
             value: { email: '' },
             suggestions: [],
-            interviewsArr: []
+            interviewsArr: [],
+            loading: true
         }
     }
     componentDidMount() {
-        axios.get(`${api}/interviews/?user=${this.state.user_id}&?survey=${this.state.survey_id}`)
+        axios.get(`${api}/interviews/?user=${this.state.user_id}&survey=${this.state.survey_id}`)
             .then(res => {
                 this.setState({
                     interviewsArr: res.data,
@@ -48,7 +50,8 @@ class AudienceEdit extends React.Component {
 
                 Promise.all(PromiseArr).then(res => {
                     this.setState({
-                        groupMembers: results.map(r => ({ ...r, isInGroup: true })).filter(f => f.id != this.state.user_id)
+                        groupMembers: results.map(r => ({ ...r, isInGroup: true })).filter(f => f.id != this.state.user_id),
+                        loading:false
                     })
                     this.state.groupMembers.forEach(i => console.log(i))
                 });
@@ -56,8 +59,6 @@ class AudienceEdit extends React.Component {
             )
 
             .catch(err => { console.log(err) })
-
-
 
         axios.get(`${api}/users/`)
             .then(response => {
@@ -162,6 +163,7 @@ class AudienceEdit extends React.Component {
             value,
             onChange: this.onChange
         };
+        if (this.state.loading) return <Dots />;
         return (
             <div className='app-container col-md-9 ml-sm-auto col-lg-10 px-md-4 mt-5'>
                 <div className='row'>

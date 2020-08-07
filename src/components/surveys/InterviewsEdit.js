@@ -6,6 +6,8 @@ import { apiUrl } from '../api';
 const api = apiUrl;
 
 class InterviewsEdit extends React.Component {
+    _isMounted = false;
+
     constructor(props) {
         super(props);
         this.state = {
@@ -20,6 +22,8 @@ class InterviewsEdit extends React.Component {
         }
     }
     componentDidMount() {
+        this._isMounted = true;
+
         axios.get(`${api}/surveys/${this.props.match.params.id}`)
             .then(response => {
                 console.log(response)
@@ -50,6 +54,9 @@ class InterviewsEdit extends React.Component {
                 console.log(error);
             })
     }
+    componentWillUnmount() {
+        this._isMounted = false;
+      }
     formatDate(date) {
         var d = new Date(date),
             month = '' + (d.getMonth() + 1),
@@ -191,7 +198,7 @@ class InterviewsEdit extends React.Component {
                     <div className='subtitle mt-4 mb-3'>Вопросы</div>
                     {this.state.inputList && this.state.inputList.map((x, i) => {
                         return (
-                            <div className="d-flex mb-3">
+                            <div className="d-flex mb-3" key={i}>
                                 {this.state.inputList.length !== 1 && <img className='reorder-icon ' src='../../icons/reorder.svg' />}
                                 <select
                                     className="custom-select category-input"
@@ -204,7 +211,6 @@ class InterviewsEdit extends React.Component {
                                     className="question-input form-control"
                                     name="description"
                                     value={x.description}
-                                    required
                                     placeholder='вопрос'
                                     onKeyDown={e => this.keyPress(e, i)}
                                     onChange={e => this.handleInputChange(e, i)}

@@ -23,6 +23,10 @@ a{
 .active-click:active{
     background-color: white !important;
 }
+.mx{
+    display: flex;
+    justify-content: center;
+}
 .header{
     font-weight: 600;
     font-size: 32px;
