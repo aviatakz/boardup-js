@@ -10,6 +10,7 @@ import AudienceList from './components/audience/AudienceList'
 import AudienceEdit from './components/audience/AudienceEdit'
 import InterviewsEdit from './components/surveys/InterviewsEdit'
 import InterviewsCreate from './components/surveys/InterviewsCreate';
+import Login from './components/general/Login';
 import Dots from './components/loader'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
@@ -33,8 +34,8 @@ function App() {
             <Route path='/audience/:survey_id/:user_id/new' exact component={AudienceCreate} />
             <Route path='/audience/:survey_id/:user_id/edit' exact component={AudienceEdit} />
 
-            <Route path='/profile' component={Dots} />
-
+            <Route path='/profile' component={Profile} />
+            <Route path='/login' component={Login} />
             <Route path='/settings' component={Settings} />
           </Switch>
         </div>
