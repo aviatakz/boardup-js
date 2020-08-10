@@ -141,7 +141,6 @@ class InterviewsCreate extends React.Component {
                                     className="question-input form-control"
                                     name="description"
                                     value={x.description}
-                                    required
                                     placeholder='вопрос'
                                     onKeyDown={e => this.keyPress(e, i)}
                                     onChange={e => this.handleInputChange(e, i)}

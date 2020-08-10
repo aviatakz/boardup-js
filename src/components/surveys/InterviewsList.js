@@ -3,30 +3,43 @@ import { NavLink } from 'react-router-dom';
 import Moment from 'react-moment';
 import axios from 'axios';
 import { apiUrl } from '../api';
+import Dots from '../loader'
 
 const api = apiUrl;
 
 class InterviewsList extends React.Component {
+    _isMounted = false;
+
     constructor(props) {
         super(props);
         this.state = {
-            interviews: []
+            interviews: [],
+            loading: true
         }
     }
 
     componentDidMount() {
+        this._isMounted = true;
+
+
         axios.get(`${api}/surveys/`)
             .then(response => {
                 if (response.data.length > 0) {
                     this.setState({
-                        interviews: response.data.map(int => int)
+                        interviews: response.data,
+                        loading:false
                     })
+                    const ints=this.state.interviews
+                    ints.forEach(e=>console.log(e))
                 }
             })
             .catch(error => {
                 console.log(error);
             })
     }
+    componentWillUnmount() {
+        this._isMounted = false;
+      }
     removeFromList(index, id) {
         const list = [...this.state.interviews];
         list.splice(index, 1);
@@ -37,6 +50,7 @@ class InterviewsList extends React.Component {
             })
     };
     render() {
+        if (this.state.loading) return <Dots />;
         return (
             <div className='app-container col-md-9 ml-sm-auto col-lg-10 px-md-4 mt-5'>
                 <div className='row'>

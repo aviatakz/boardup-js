@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { apiUrl } from '../api';
+import Dots from '../loader'
 
 const api = apiUrl;
 
@@ -15,7 +16,8 @@ class AudienceCreate extends React.Component {
             reviews: [],
             groupMembers: [],
             value: { email: '' },
-            suggestions: []
+            suggestions: [],
+            loading: true
         }
     }
     componentDidMount() {
@@ -38,7 +40,8 @@ class AudienceCreate extends React.Component {
 
                 Promise.all(PromiseArr).then(res => {
                     this.setState({
-                        groupMembers: results.map(r => ({ ...r, isInGroup: true })).filter(f => f.id != this.state.user_id)
+                        groupMembers: results.map(r => ({ ...r, isInGroup: true })).filter(f => f.id != this.state.user_id),
+                        loading:false
                     })
                     console.log(results)
                     console.log(this.state.groupMembers)
@@ -128,6 +131,7 @@ class AudienceCreate extends React.Component {
             value,
             onChange: this.onChange
         };
+        if (this.state.loading) return <Dots />;
         return (
             <div className='app-container col-md-9 ml-sm-auto col-lg-10 px-md-4 mt-5'>
                 <div className='row'>
