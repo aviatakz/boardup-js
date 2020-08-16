@@ -2,10 +2,9 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import Moment from 'react-moment';
 import axios from 'axios';
-import { apiUrl } from '../api';
+import api from '../api';
 import Dots from '../loader'
 
-const api = apiUrl;
 
 class InterviewsList extends React.Component {
     _isMounted = false;
@@ -22,15 +21,14 @@ class InterviewsList extends React.Component {
         this._isMounted = true;
 
 
-        axios.get(`${api}/surveys/`)
+        api.get(`surveys/`)
             .then(response => {
                 if (response.data.length > 0) {
                     this.setState({
-                        interviews: response.data,
+                        interviews: response.data.sort((a, b) => (a.id > b.id) ? -1 : 1)
+                        ,
                         loading:false
                     })
-                    const ints=this.state.interviews
-                    ints.forEach(e=>console.log(e))
                 }
             })
             .catch(error => {
@@ -43,7 +41,7 @@ class InterviewsList extends React.Component {
     removeFromList(index, id) {
         const list = [...this.state.interviews];
         list.splice(index, 1);
-        axios.delete(`${api}/surveys/${id}`)
+        api.delete(`surveys/${id}`)
             .then(res => {
                 console.log(res.data);
                 this.setState({ interviews: list })

@@ -1,9 +1,9 @@
 import React from 'react';
 import axios from 'axios';
-import { apiUrl } from '../api';
+import api from '../api';
 import Dots from '../loader'
+import auth from '../auth'
 
-const api = apiUrl;
 
 class AudienceCreate extends React.Component {
     constructor(props) {
@@ -21,7 +21,7 @@ class AudienceCreate extends React.Component {
         }
     }
     componentDidMount() {
-        axios.get(`${api}/users/${this.state.user_id}`)
+        api.get(`users/${this.state.user_id}`)
             .then(response => {
                 this.setState({
                     user: response.data
@@ -33,7 +33,7 @@ class AudienceCreate extends React.Component {
                 let results = []
                 for (let i = 0; i < info.length; i++) {
 
-                    let url = api + "/users/?groups=" + info[i]
+                    let url = api.defaults.baseURL + "/users/?groups=" + info[i]
                     PromiseArr.push(
                         axios.get(url).then(result => results = result.data))
                 }
@@ -50,7 +50,7 @@ class AudienceCreate extends React.Component {
             }
             ).catch(err => { console.log(err) })
 
-        axios.get(`${api}/users/`)
+        api.get(`users/`)
             .then(response => {
                 if (response.data.length > 0) {
                     this.setState({
@@ -79,7 +79,7 @@ class AudienceCreate extends React.Component {
         }
         return (
             <ul>
-                {suggestions.map(item => <li onClick={() => this.suggestionSelected(item)}>{item.email}</li>)}
+                {suggestions.map(item => <li key={item.id} onClick={() => this.suggestionSelected(item)}>{item.email}</li>)}
             </ul>
         )
     }
@@ -117,10 +117,12 @@ class AudienceCreate extends React.Component {
         const interviewsArr=targets.map(t=> ({user_id:parseInt(this.state.user_id), target_user_id:t.id, target_user:t, survey_id:parseInt(this.state.survey_id), comment:'ok'}))
         interviewsArr.forEach(e=>console.log(e))
 
-        axios.post(`${api}/interviews/create_interviews/`, interviewsArr)
+        api.post(`interviews/create_interviews/`, interviewsArr)
             .then(res=>{
                 console.log(res)
-                window.location='/audience/'+this.state.survey_id
+                auth.login(() => {
+                    this.props.history.push('/audience/'+this.state.survey_id);
+                  });
             })
             .catch(err=>console.log(err))
     }
@@ -154,8 +156,8 @@ class AudienceCreate extends React.Component {
                     <div className='col members-list'>
                         <label>Предложенные:</label>
                         <ul className='list-unstyled'>
-                            {this.state.groupMembers && this.state.groupMembers.map((item) =>
-                                <div className='member-container d-flex mb-2'>
+                            {this.state.groupMembers && this.state.groupMembers.map((item, i) =>
+                                <div key={i} className='member-container d-flex mb-2'>
                                     <img className='arrow-icon' src='../../../icons/arrow-left.svg' onClick={() => this.moveFromGroup(item)} />
                                     <div className='bg-white li'><li>{item.email}</li></div>
                                 </div>

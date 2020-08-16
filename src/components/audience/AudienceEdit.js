@@ -1,9 +1,9 @@
 import React from 'react';
 import axios from 'axios';
-import { apiUrl } from '../api';
+import api from '../api';
 import Dots from '../loader'
+import auth from '../auth'
 
-const api = apiUrl;
 class AudienceEdit extends React.Component {
     constructor(props) {
         super(props);
@@ -21,7 +21,7 @@ class AudienceEdit extends React.Component {
         }
     }
     componentDidMount() {
-        axios.get(`${api}/interviews/?user=${this.state.user_id}&survey=${this.state.survey_id}`)
+        api.get(`interviews/?user=${this.state.user_id}&survey=${this.state.survey_id}`)
             .then(res => {
                 this.setState({
                     interviewsArr: res.data,
@@ -31,7 +31,7 @@ class AudienceEdit extends React.Component {
             })
             .catch(err => console.log(err))
 
-        axios.get(`${api}/users/${this.state.user_id}`)
+        api.get(`users/${this.state.user_id}`)
             .then(response => {
                 this.setState({
                     user: response.data
@@ -43,7 +43,7 @@ class AudienceEdit extends React.Component {
                 let results = []
                 for (let i = 0; i < info.length; i++) {
 
-                    let url = api + "/users/?groups=" + info[i]
+                    let url = api.defaults.baseURL + "users/?groups=" + info[i]
                     PromiseArr.push(
                         axios.get(url).then(result => results = result.data))
                 }
@@ -60,7 +60,7 @@ class AudienceEdit extends React.Component {
 
             .catch(err => { console.log(err) })
 
-        axios.get(`${api}/users/`)
+        api.get(`users/`)
             .then(response => {
                 if (response.data.length > 0) {
                     this.setState({
@@ -116,7 +116,7 @@ class AudienceEdit extends React.Component {
                 return obj.target_user_id === user.id
             })
             console.log(result)
-            axios.delete(`${api}/interviews/${result.id}`)
+            api.delete(`interviews/${result.id}`)
                 .then(res => {
                     console.log(res.data);
                 })
@@ -149,11 +149,12 @@ class AudienceEdit extends React.Component {
 
         const interviews = targets.map(t => ({ user_id: parseInt(this.state.user_id), target_user_id: t.id, survey_id: parseInt(this.state.survey_id), comment: 'ok' }))
 
-        axios.post(`${api}/interviews/create_interviews/`, interviews)
+        api.post(`interviews/create_interviews/`, interviews)
             .then(res => {
                 console.log(res)
-                window.location = '/audience/' + this.state.survey_id
-            })
+                auth.login(() => {
+                    this.props.history.push('/audience/'+this.state.survey_id);
+                  });            })
             .catch(err => console.log(err))
     }
     render() {

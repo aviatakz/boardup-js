@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-
+import auth from '../auth'
 class InterviewsCreate extends React.Component {
     constructor(props) {
         super(props);
@@ -9,7 +9,7 @@ class InterviewsCreate extends React.Component {
             start_date: new Date(),
             end_date: new Date(),
             isActivated: true,
-            inputList: [{ category_id: 1, description: "" }],
+            inputList: [{ category_id: 1, description: " " }],
             order: 1,
             audience: [],
             categories: [],
@@ -95,7 +95,9 @@ class InterviewsCreate extends React.Component {
             })
             .then((response) => {
                 console.log(response)
-                window.location = '/interviews'
+                auth.login(() => {
+                    this.props.history.push('/interviews');
+                  });
             }).catch(err => console.log(err))
 
     }
@@ -119,7 +121,7 @@ class InterviewsCreate extends React.Component {
                             <div className='switch-container mt-3'>
                                 <label className="switch" >
                                     <input id='toggle-switch' type="checkbox" onClick={() => this.handleSwitchChange()} checked={this.state.isActivated} className="default" />
-                                    <span className="slider round"></span>
+                                    <span className={this.state.isActivated ? 'slider round default':'slider round light'}></span>
                                 </label>
                             </div>
                         </div>

@@ -1,10 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 import { NavLink } from 'react-router-dom';
-import { apiUrl } from '../api';
+import api from '../api';
 import Dots from '../loader'
-
-const api = apiUrl;
 
 class AudienceList extends React.Component {
     _isMounted = false;
@@ -23,7 +21,7 @@ class AudienceList extends React.Component {
     componentDidMount() {
         this._isMounted = true;
 
-        axios.get(`${api}/users/`)
+        api.get(`users/`)
             .then(response => {
                 if (response.data.length > 0) {
                     this.setState({
@@ -36,7 +34,7 @@ class AudienceList extends React.Component {
                 const PromiseArr = [];
                 let results = []
                 for (let i = 0; i < info.length; i++) {
-                    let url = api + "/interviews/?user=" + info[i].id + '&survey=' + parseInt(this.state.survey_id)
+                    let url = api.defaults.baseURL + "interviews/?user=" + info[i].id + '&survey=' + parseInt(this.state.survey_id)
                     PromiseArr.push(
                         axios.get(url).then(result => {
                             results.push({length:result.data.length, user_email:info[i].email, user_id: info[i].id})
@@ -55,7 +53,7 @@ class AudienceList extends React.Component {
                 const PromiseArr = [];
                 let results = []
                 for (let i = 0; i < info.length; i++) {
-                    let url = api + "/interviews/?target_user=" + info[i].id + '&survey=' + parseInt(this.state.survey_id)
+                    let url = api.defaults.baseURL + "interviews/?target_user=" + info[i].id + '&survey=' + parseInt(this.state.survey_id)
                     PromiseArr.push(
                         axios.get(url).then(result => {
                             results.push({length:result.data.length, user_email:info[i].email, user_id: info[i].id})
@@ -98,7 +96,7 @@ class AudienceList extends React.Component {
                             <tbody>
                                 {reviews && reviews.map((item, i) =>
                                     <tr key={item.user_id}>
-                                        <td className=''>{item.user_email}</td>
+                                        <td><NavLink to={"/interviews/results/" + item.user_id + '/'+this.state.survey_id}>{item.user_email}</NavLink></td>
                                         <td>{item.length}</td>
                                         <td>{targets && targets.find(el => {return el.user_id===item.user_id}).length}</td>
                                         <td>{item.length!==0 ? <NavLink to={'/audience/' + this.state.survey_id + '/' + item.user_id + '/edit'}>редактировать</NavLink> : <NavLink to={'/audience/' + this.state.survey_id + '/' + item.user_id + '/new'}>создать</NavLink>}</td>

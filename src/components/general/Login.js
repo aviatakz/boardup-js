@@ -1,61 +1,82 @@
 import React from 'react';
 import axios from 'axios';
-import { apiUrl } from '../api';
+import auth from '../auth'
+import api from '../api';
 
-const api = apiUrl;
 class Login extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             username: '',
-            password: ''
+            password: '',
+            error: false
         }
     }
-    onUsernameChange = (e) => {
+    onUsernameChange = e => {
         this.setState({
             username: e.target.value
         })
     }
-    onPasswordChange = (e) => {
+    onPasswordChange = e => {
         this.setState({
             password: e.target.value
         })
     }
-    onFormSubmit = (e) => {
+    onFormSubmit = e => {
         const user = {
             username: this.state.username,
             password: this.state.password
         }
         console.log(user)
-        axios.post(`${api}/auth/login/`, user)
-            .then(res => console.log(res))
+        api.post(`auth/login/`, user)
+            .then(res => {
+                if (res.status === 200) {
+                    auth.login(() => {
+                        this.props.history.push("/interviews");
+                    });
+                    console.log(res.data.token)
+                    localStorage.setItem("login_data", this.state.username + ':' + this.state.password);
+                    this.props.handleAuth(res.data)
+                }
+            }
+            )
+            .catch(err => {
+                this.setState({
+                    error: true
+                })
+            })
     }
-    render (){
+    render() {
+        let errorMsg;
+        if (this.state.error) {
+            errorMsg = <div className="alert alert-danger" role="alert">Неверный логин или пароль</div>
+        }
         return (
-            <div className='app-container col-md-9 ml-sm-auto col-lg-10 px-md-4 mt-5 d-flex justify-content-center'>
-                <section class="form-elegant">
-                    <div class="card">
-                    <div class="card-body mx-4">
-                        <div class="text-center">
-                        <h3 class="dark-grey-text mb-5"><strong>Вход</strong></h3>
-                        </div>
-                        <div class="md-form">
-                        <label for="Form-username1">Username</label>
-                        <input type="text" id="Form-username1" class="form-control mb-2" value={this.state.username} onChange={e => this.onUsernameChange(e)} />
-                        </div>
-                        <div class="md-form pb-3">
-                        <label for="Form-pass1">Пароль</label>
-                        <input type="password" id="Form-pass1" class="form-control mb-3" value={this.state.password} onChange={e => this.onPasswordChange(e)} />
-                        </div>
-                        <div class="text-center mb-3">
-                        <button type="button" class="btn blue-gradient btn-block btn-rounded z-depth-1a" onClick={e => this.onFormSubmit(e)}>Войти</button>
+            <div className='app-container col-md-9 ml-sm-auto col-lg-10 px-md-4 mt-5 d-flex justify-content-center mx-auto align-items-center'>
+                <section className="form-elegant mt-5">
+                    <div className="card mt-3">
+                        <div className="card-body mx-4">
+                            <div className="text-center">
+                                <h3 className="dark-grey-text mb-5"><strong>Вход</strong></h3>
+                            </div>
+                            <div className="md-form">
+                                <label htmlFor="Form-username1">Username</label>
+                                <input type="text" id="Form-username1" className="form-control mb-2" value={this.state.username} onChange={e => this.onUsernameChange(e)} />
+                            </div>
+                            <div className="md-form pb-3">
+                                <label htmlFor="Form-pass1">Пароль</label>
+                                <input type="password" id="Form-pass1" className="form-control mb-3" value={this.state.password} onChange={e => this.onPasswordChange(e)} />
+                            </div>
+                            <div className="text-center mb-3">
+                                <button type="button" className="btn blue-gradient btn-block btn-rounded z-depth-1a" onClick={e => this.onFormSubmit(e)}>Войти</button>
+                            </div>
+                            {errorMsg}
                         </div>
                     </div>
-                    </div>
-               </section> 
+                </section>
             </div>
         );
     }
 }
 
-  export default Login;
+export default Login;

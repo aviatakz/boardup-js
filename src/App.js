@@ -10,38 +10,85 @@ import AudienceList from './components/audience/AudienceList'
 import AudienceEdit from './components/audience/AudienceEdit'
 import InterviewsEdit from './components/surveys/InterviewsEdit'
 import InterviewsCreate from './components/surveys/InterviewsCreate';
+import Users from './components/users/Users'
 import Login from './components/general/Login';
-import Dots from './components/loader'
+import { ProtectedRoute } from "./components/protected-route";
+import InterviewsResults from './components/surveys/InterviewsResults'
+import auth from './components/auth'
+import axios from 'axios'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 
 
-function App() {
-  return (
-    <Router>
-      <div className="container-fluid">
-        <div className='row'>
-          <Navbar />
-          <Switch>
-            <Route path='/' exact component={Home} />
-            <Route path='/groups' component={Groups} />
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoggedIn: false,
+      username: ''
+    }
+  }
+  handleAuth = (e) => {
+    this.setState({
+      isLoggedIn: true,
+      username: 'tester'
+    })
+  }
+  componentDidMount() {
+    if (auth.isAuthenticated()) {
+      this.setState({
+        isLoggedIn: true,
+        username: 'tester'
+      })
+    } else (
+      this.setState({
+        isLoggedIn: false,
+        username: ''
+      })
+    )
+  }
+  handleQuit = (e) => {
+    auth.logout(() => {
+      e.push("/login");
+    }
+    );
+    this.setState({
+      isLoggedIn: false,
+      username: ''
+    })
 
-            <Route path='/interviews' exact component={InterviewsList} />
-            <Route path='/interviews/:id/edit' component={InterviewsEdit} />
-            <Route path='/interviews/new' component={InterviewsCreate} />
+  }
+  render() {
+    return (
+      <Router>
+        <div className="container-fluid">
+          <div className='row'>
+            <Navbar isLoggedIn={this.state.isLoggedIn} username={this.state.username} handleQuit={(e) => this.handleQuit(e)} />
+            <Switch>
+              <ProtectedRoute path='/' exact component={Home} />
+              <ProtectedRoute path='/groups' component={Groups} />
+              <ProtectedRoute path='/users' component={Users} />
+              <ProtectedRoute path='/profile' component={Profile} />
+              <ProtectedRoute path='/settings' component={Settings} />
 
-            <Route path='/audience/:survey_id' exact component={AudienceList} />
-            <Route path='/audience/:survey_id/:user_id/new' exact component={AudienceCreate} />
-            <Route path='/audience/:survey_id/:user_id/edit' exact component={AudienceEdit} />
+              <ProtectedRoute path='/interviews' exact component={InterviewsList} />
+              <ProtectedRoute path='/interviews/:id/edit' component={InterviewsEdit} />
+              <ProtectedRoute path='/interviews/new' component={InterviewsCreate} />
+              <ProtectedRoute path='/interviews/results/:user_id/:survey_id' component={InterviewsResults} />
 
-            <Route path='/profile' component={Profile} />
-            <Route path='/login' component={Login} />
-            <Route path='/settings' component={Settings} />
-          </Switch>
+              <ProtectedRoute path='/audience/:survey_id' exact component={AudienceList} />
+              <ProtectedRoute path='/audience/:survey_id/:user_id/new' exact component={AudienceCreate} />
+              <ProtectedRoute path='/audience/:survey_id/:user_id/edit' exact component={AudienceEdit} />
+
+              <Route exact path='/login' render={props => (<Login {...props}
+                handleAuth={(e) => this.handleAuth(e)}
+              />)} />
+            </Switch>
+          </div>
         </div>
-      </div>
-    </Router>
-  );
+      </Router>
+    );
+  }
 }
 
 export default App;
