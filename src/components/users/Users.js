@@ -1,13 +1,13 @@
 import React from 'react';
 
-class Workers extends React.Component {
+class Users extends React.Component {
     render (){
         return (
             <div className='app-container col-md-9 ml-sm-auto col-lg-10 px-md-4 mt-5'>
-                Workers 
+                Users 
             </div>
         );
     }
 }
 
-  export default Workers;
+  export default Users;

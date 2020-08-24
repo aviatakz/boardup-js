@@ -3,7 +3,7 @@ import Loader from 'react-loader-spinner'
 
 const Dots = () => {
   return (
-    <div className='mx col-md-9 ml-sm-auto col-lg-10 px-md-4 mt-5'>
+    <div className='mx col-md-9 ml-sm-auto loader col-lg-10 px-md-4'>
     <Loader
     type="ThreeDots"
     color="#00BC00"

@@ -1,9 +1,6 @@
 import React from 'react';
-import axios from 'axios';
-import Moment from 'react-moment';
-import { apiUrl } from '../api';
-
-const api = apiUrl;
+import api from '../api';
+import auth from '../auth'
 
 class InterviewsEdit extends React.Component {
     _isMounted = false;
@@ -24,7 +21,7 @@ class InterviewsEdit extends React.Component {
     componentDidMount() {
         this._isMounted = true;
 
-        axios.get(`${api}/surveys/${this.props.match.params.id}`)
+        api.get(`surveys/${this.props.match.params.id}`)
             .then(response => {
                 console.log(response)
                 this.setState({
@@ -42,7 +39,7 @@ class InterviewsEdit extends React.Component {
                 console.log(error);
             })
 
-        axios.get(`${api}/categories/`)
+        api.get(`categories/`)
             .then(response => {
                 if (response.data.length > 0) {
                     this.setState({
@@ -100,7 +97,7 @@ class InterviewsEdit extends React.Component {
     };
     removeFromList(index) {
         if (this.state.inputList[index].hasOwnProperty('id')) {
-            axios.delete(`${api}/questions/${this.state.inputList[index].id}`)
+            api.delete(`questions/${this.state.inputList[index].id}`)
                 .then(res => {
                     console.log(res.data);
                 })
@@ -138,16 +135,13 @@ class InterviewsEdit extends React.Component {
             end_date: new Date(this.state.end_date).toISOString(),
             is_active: this.state.isActivated,
         }
-
-        console.log(survey)
-
-        axios.put(`${api}/surveys/${this.props.match.params.id}/`, survey)
+        api.put(`surveys/${this.props.match.params.id}/`, survey)
             .then((response) => {
                 console.log(response);
             })
             .then(res => {
                 if (created_questions) {
-                    axios.post(`${api}/questions/create_questions/`, created_questions)
+                    api.post(`questions/create_questions/`, created_questions)
                 }
                 if (updated_questions) {
                     const info = updated_questions.map(q => q);
@@ -155,22 +149,21 @@ class InterviewsEdit extends React.Component {
                     let results = []
                     for (let i = 0; i < info.length; i++) {
 
-                        let url = api + "/questions/" + info[i].id + "/"
+                        let url = "questions/" + info[i].id + "/"
                         PromiseArr.push(
-                            axios.put(url, info[i]).then(result => results = result.data))
+                            api.put(url, info[i]).then(result => results = result.data))
                     }
 
                     Promise.all(PromiseArr).then(res => {
                         console.log(results)
                     });
                 }
-                window.location = '/interviews'
-            }
+                auth.login(() => {
+                    this.props.history.push('/interviews');
+                  });            }
 
             ).catch(err => { console.log(err) })
-
     }
-
     render() {
         return (
             <div className='app-container col-md-9 ml-sm-auto col-lg-10 px-md-4 mt-5'>
@@ -190,7 +183,7 @@ class InterviewsEdit extends React.Component {
                             <div className='switch-container mt-3'>
                                 <label className="switch" >
                                     <input id='toggle-switch' type="checkbox" onClick={() => this.handleSwitchChange()} checked={this.state.isActivated} className="default" />
-                                    <span className="slider round"></span>
+                                    <span className={this.state.isActivated ? 'slider round default':'slider round light'}></span>
                                 </label>
                             </div>
                         </div>
@@ -205,7 +198,7 @@ class InterviewsEdit extends React.Component {
                                     name="category_id"
                                     value={x.category_id}
                                     onChange={e => this.handleSelectChange(e, i)}>
-                                    {this.state.categories && this.state.categories.map(cat => <option value={cat.id}>{cat.name}</option>)}
+                                    {this.state.categories && this.state.categories.map(cat => <option key={cat.id} value={cat.id}>{cat.name}</option>)}
                                 </select>
                                 <input
                                     className="question-input form-control"
