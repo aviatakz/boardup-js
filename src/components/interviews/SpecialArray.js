@@ -8,7 +8,6 @@ export const SpecialArray = function () {
                 keys[key] = true;
             }
         };
-
         objs.push(obj);
         return this;
     };

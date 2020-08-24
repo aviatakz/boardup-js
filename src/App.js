@@ -4,21 +4,19 @@ import Home from './components/general/Home.js';
 import Groups from './components/users/Groups.js';
 import Profile from './components/users/Profile.js';
 import Settings from './components/general/Settings';
-import InterviewsList from './components/surveys/InterviewsList';
+import InterviewsList from './components/interviews/InterviewsList';
 import AudienceCreate from './components/audience/AudienceCreate';
-import AudienceList from './components/audience/AudienceList'
-import AudienceEdit from './components/audience/AudienceEdit'
-import InterviewsEdit from './components/surveys/InterviewsEdit'
-import InterviewsCreate from './components/surveys/InterviewsCreate';
-import Users from './components/users/Users'
+import AudienceList from './components/audience/AudienceList';
+import AudienceEdit from './components/audience/AudienceEdit';
+import InterviewsEdit from './components/interviews/InterviewsEdit';
+import InterviewsCreate from './components/interviews/InterviewsCreate';
+import Users from './components/users/Users';
 import Login from './components/general/Login';
 import { ProtectedRoute } from "./components/protected-route";
-import InterviewsResults from './components/surveys/InterviewsResults'
-import auth from './components/auth'
-import axios from 'axios'
+import InterviewsResults from './components/interviews/InterviewsResults'
+import auth from './components/auth';
+import Dots from './components/loader'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-
-
 
 class App extends React.Component {
   constructor(props) {
@@ -79,7 +77,7 @@ class App extends React.Component {
               <ProtectedRoute path='/audience/:survey_id' exact component={AudienceList} />
               <ProtectedRoute path='/audience/:survey_id/:user_id/new' exact component={AudienceCreate} />
               <ProtectedRoute path='/audience/:survey_id/:user_id/edit' exact component={AudienceEdit} />
-
+              <Route path='/loader' component={Dots} />
               <Route exact path='/login' render={props => (<Login {...props}
                 handleAuth={(e) => this.handleAuth(e)}
               />)} />

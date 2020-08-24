@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 import api from '../api';
 import auth from '../auth'
 
@@ -136,16 +135,13 @@ class InterviewsEdit extends React.Component {
             end_date: new Date(this.state.end_date).toISOString(),
             is_active: this.state.isActivated,
         }
-
-        console.log(survey)
-
-        axios.put(`${api}/surveys/${this.props.match.params.id}/`, survey)
+        api.put(`surveys/${this.props.match.params.id}/`, survey)
             .then((response) => {
                 console.log(response);
             })
             .then(res => {
                 if (created_questions) {
-                    axios.post(`${api}/questions/create_questions/`, created_questions)
+                    api.post(`questions/create_questions/`, created_questions)
                 }
                 if (updated_questions) {
                     const info = updated_questions.map(q => q);
@@ -153,9 +149,9 @@ class InterviewsEdit extends React.Component {
                     let results = []
                     for (let i = 0; i < info.length; i++) {
 
-                        let url = api + "/questions/" + info[i].id + "/"
+                        let url = "questions/" + info[i].id + "/"
                         PromiseArr.push(
-                            axios.put(url, info[i]).then(result => results = result.data))
+                            api.put(url, info[i]).then(result => results = result.data))
                     }
 
                     Promise.all(PromiseArr).then(res => {
@@ -167,9 +163,7 @@ class InterviewsEdit extends React.Component {
                   });            }
 
             ).catch(err => { console.log(err) })
-
     }
-
     render() {
         return (
             <div className='app-container col-md-9 ml-sm-auto col-lg-10 px-md-4 mt-5'>

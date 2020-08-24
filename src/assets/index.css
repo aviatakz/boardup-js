@@ -9,6 +9,9 @@ body {
     font-size: 14px !important;
     color:#2D2D2D !important;
 }
+.loader{
+    margin-top: 200px;
+}
 .app-container{
     margin-left: 200px !important;
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import auth from '../auth'
 import { NavLink, withRouter } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 class Navbar extends React.Component {
     constructor(props) {
@@ -14,7 +15,6 @@ class Navbar extends React.Component {
         }
     }
     componentDidMount(){
-        console.log(this.props.isLoggedIn)
         console.log(auth.isAuthenticated())
             this.setState({
                 isLoggedIn: this.props.isLoggedIn,
@@ -24,16 +24,18 @@ class Navbar extends React.Component {
     }
     componentWillReceiveProps(nextProps){
         this.setState({
-            isLoggedIn:nextProps.isLoggedIn,
+            isLoggedIn: nextProps.isLoggedIn,
             username: nextProps.username
         })
     }
-    
     render() {
         let quitBtn;
         if(this.state.isLoggedIn){
             quitBtn = <li className="nav-item mt-2 mx-2"><a className='nav-link semibold pb-3' onClick={() => this.props.handleQuit(this.props.history)}>Выйти</a></li>
         }
+
+        const { match, location } = this.props;
+
         return (
             <nav id='sidebarMenu' className="col-md-3 col-lg-2 d-md-block bg-light sidebar">
                 <div className='sidebar-sticky'>
@@ -43,7 +45,7 @@ class Navbar extends React.Component {
                             <div className='border mb-3 ml-3'></div>
                         </li>
                         <li className="nav-item ml-2">
-                            <NavLink activeStyle={this.activeStyle} className='nav-link' exact to='/interviews'>Опросы</NavLink>
+                            <NavLink activeStyle={this.activeStyle} isActive={ () => ['/interviews', '/interviews/:id/edit', '/interviews/new', '/interviews/results/:user_id/:survey_id', '/audience/:survey_id', '/audience/:survey_id/:user_id/new', '/audience/:survey_id/:user_id/edit'].includes(location.pathname) } className='nav-link' exact to='/interviews'>Опросы</NavLink>
                         </li>
                         <li className="nav-item ml-2">
                             <NavLink activeStyle={this.activeStyle} className='nav-link' to='/users'>Пользователи</NavLink>

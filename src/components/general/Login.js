@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 import auth from '../auth'
 import api from '../api';
 
@@ -23,18 +22,18 @@ class Login extends React.Component {
         })
     }
     onFormSubmit = e => {
+        e.preventDefault()
         const user = {
             username: this.state.username,
             password: this.state.password
         }
-        console.log(user)
         api.post(`auth/login/`, user)
             .then(res => {
                 if (res.status === 200) {
                     auth.login(() => {
                         this.props.history.push("/interviews");
                     });
-                    console.log(res.data.token)
+                    console.log('success')
                     localStorage.setItem("login_data", this.state.username + ':' + this.state.password);
                     this.props.handleAuth(res.data)
                 }

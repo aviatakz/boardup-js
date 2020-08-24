@@ -1,6 +1,7 @@
 import React from 'react';
-import axios from 'axios';
-import auth from '../auth'
+import auth from '../auth';
+import api from '../api';
+
 class InterviewsCreate extends React.Component {
     constructor(props) {
         super(props);
@@ -17,7 +18,7 @@ class InterviewsCreate extends React.Component {
         }
     }
     componentDidMount() {
-        axios.get('http://46.101.246.71:8000/categories/')
+        api.get('categories/')
             .then(response => {
                 if (response.data.length > 0) {
                     this.setState({
@@ -86,12 +87,12 @@ class InterviewsCreate extends React.Component {
         }
         const arr = this.state.inputList.map(question => ({ ...question, order: 0 }))
 
-        axios.post('http://46.101.246.71:8000/surveys/', survey)
+        api.post('surveys/', survey)
             .then((response) => {
                 this.setState({ submittedSurveyId: response.data.id })
                 const questionsOfSurvey = arr.map(question => ({ ...question, survey_id: this.state.submittedSurveyId }))
                 questionsOfSurvey.forEach(e => console.log(e))
-                return axios.post('http://46.101.246.71:8000/questions/create_questions/', questionsOfSurvey)
+                return api.post('questions/create_questions/', questionsOfSurvey)
             })
             .then((response) => {
                 console.log(response)
@@ -99,9 +100,7 @@ class InterviewsCreate extends React.Component {
                     this.props.history.push('/interviews');
                   });
             }).catch(err => console.log(err))
-
     }
-
     render() {
         return (
             <div className='app-container col-md-9 ml-sm-auto col-lg-10 px-md-4 mt-5'>
@@ -142,6 +141,7 @@ class InterviewsCreate extends React.Component {
                                 <input
                                     className="question-input form-control"
                                     name="description"
+                                    required
                                     value={x.description}
                                     placeholder='вопрос'
                                     onKeyDown={e => this.keyPress(e, i)}

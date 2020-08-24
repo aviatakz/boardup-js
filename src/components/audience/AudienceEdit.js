@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 import api from '../api';
 import Dots from '../loader'
 import auth from '../auth'
@@ -43,9 +42,9 @@ class AudienceEdit extends React.Component {
                 let results = []
                 for (let i = 0; i < info.length; i++) {
 
-                    let url = api.defaults.baseURL + "users/?groups=" + info[i]
+                    let url = "users/?groups=" + info[i]
                     PromiseArr.push(
-                        axios.get(url).then(result => results = result.data))
+                        api.get(url).then(result => results = result.data))
                 }
 
                 Promise.all(PromiseArr).then(res => {
@@ -57,7 +56,6 @@ class AudienceEdit extends React.Component {
                 });
             }
             )
-
             .catch(err => { console.log(err) })
 
         api.get(`users/`)
@@ -71,7 +69,6 @@ class AudienceEdit extends React.Component {
             .catch((error) => {
                 console.log(error);
             })
-
     }
     onAutoChange = e => {
         this.items = this.state.users.map(u => u);
@@ -80,7 +77,6 @@ class AudienceEdit extends React.Component {
         const suggestions = value.length > 0 ? this.items.sort().filter(v => regex.test(v.email)) : []
 
         this.setState(() => ({ suggestions, value: value }));
-
     }
     renderSuggestions() {
         const { suggestions } = this.state;
@@ -101,11 +97,10 @@ class AudienceEdit extends React.Component {
     }
     moveFromGroup = user => {
         this.setState({
-
             groupMembers: this.state.groupMembers.filter(function (item) {
                 return item !== user;
             }),
-            reviews: [...this.state.reviews, user]
+            reviews: user.email ? [...this.state.reviews, user] : this.state.reviews
         });
     }
     removeFromReviews = user => {
@@ -121,7 +116,6 @@ class AudienceEdit extends React.Component {
                     console.log(res.data);
                 })
         }
-
         this.setState({
             reviews: this.state.reviews.filter(function (item) {
                 return item !== user;
@@ -135,7 +129,6 @@ class AudienceEdit extends React.Component {
     saveAudience() {
         const reviews = this.state.reviews;
         reviews.forEach(function (v) { delete v.isInGroup });
-
         const ints = this.state.interviewsArr;
 
         const result = reviews.filter(function (item) {
@@ -144,9 +137,7 @@ class AudienceEdit extends React.Component {
             }) == undefined;
         });
         result.forEach(e => console.log(e))
-
         const targets = result;
-
         const interviews = targets.map(t => ({ user_id: parseInt(this.state.user_id), target_user_id: t.id, survey_id: parseInt(this.state.survey_id), comment: 'ok' }))
 
         api.post(`interviews/create_interviews/`, interviews)

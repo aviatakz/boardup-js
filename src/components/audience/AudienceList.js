@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 import { NavLink } from 'react-router-dom';
 import api from '../api';
 import Dots from '../loader'
@@ -17,7 +16,6 @@ class AudienceList extends React.Component {
             loading: true
         }
     }
-
     componentDidMount() {
         this._isMounted = true;
 
@@ -34,9 +32,9 @@ class AudienceList extends React.Component {
                 const PromiseArr = [];
                 let results = []
                 for (let i = 0; i < info.length; i++) {
-                    let url = api.defaults.baseURL + "interviews/?user=" + info[i].id + '&survey=' + parseInt(this.state.survey_id)
+                    let url = "interviews/?user=" + info[i].id + '&survey=' + parseInt(this.state.survey_id)
                     PromiseArr.push(
-                        axios.get(url).then(result => {
+                        api.get(url).then(result => {
                             results.push({length:result.data.length, user_email:info[i].email, user_id: info[i].id})
                         }))
                 }
@@ -53,9 +51,9 @@ class AudienceList extends React.Component {
                 const PromiseArr = [];
                 let results = []
                 for (let i = 0; i < info.length; i++) {
-                    let url = api.defaults.baseURL + "interviews/?target_user=" + info[i].id + '&survey=' + parseInt(this.state.survey_id)
+                    let url = "interviews/?target_user=" + info[i].id + '&survey=' + parseInt(this.state.survey_id)
                     PromiseArr.push(
-                        axios.get(url).then(result => {
+                        api.get(url).then(result => {
                             results.push({length:result.data.length, user_email:info[i].email, user_id: info[i].id})
                         }))
                 }
@@ -64,7 +62,6 @@ class AudienceList extends React.Component {
                         targeted: results,
                         loading:false
                     })
-
                 }); 
             })
             .catch(error => {
@@ -74,7 +71,6 @@ class AudienceList extends React.Component {
     componentWillUnmount() {
         this._isMounted = false;
       }
-
     render() {
         const reviews = this.state.reviews
         const targets = this.state.targeted

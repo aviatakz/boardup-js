@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 import api from '../api';
 import Dots from '../loader'
 import auth from '../auth'
@@ -33,9 +32,9 @@ class AudienceCreate extends React.Component {
                 let results = []
                 for (let i = 0; i < info.length; i++) {
 
-                    let url = api.defaults.baseURL + "/users/?groups=" + info[i]
+                    let url = "/users/?groups=" + info[i]
                     PromiseArr.push(
-                        axios.get(url).then(result => results = result.data))
+                        api.get(url).then(result => results = result.data))
                 }
 
                 Promise.all(PromiseArr).then(res => {
@@ -91,11 +90,10 @@ class AudienceCreate extends React.Component {
     }
     moveFromGroup = user => {
         this.setState({
-
             groupMembers: this.state.groupMembers.filter(function (item) {
                 return item !== user;
             }),
-            reviews: [...this.state.reviews, user]
+            reviews: user.email ? [...this.state.reviews, user] : this.state.reviews
         });
     }
     removeFromReviews = user => {
